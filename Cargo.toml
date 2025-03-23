@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "src/icp-art-gallery-backend"
+]
+resolver = "2"

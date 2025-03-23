@@ -1,0 +1,27 @@
+{
+  "canisters": {
+    "icp-art-gallery-backend": {
+      "candid": "src/icp-art-gallery-backend/icp-art-gallery-backend.did",
+      "package": "icp-art-gallery-backend",
+      "type": "rust"
+    },
+    "icp-art-gallery-frontend": {
+      "dependencies": [
+        "icp-art-gallery-backend"
+      ],
+      "source": [
+        "src/icp-art-gallery-frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "icp-art-gallery-frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
