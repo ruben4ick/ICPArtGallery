@@ -23,6 +23,13 @@ dfx canister --help
 
 ## Running the project locally
 
+You need to have yarn -v > 3.
+```bash
+npm install --global yarn
+corepack enable
+corepack prepare yarn@4.7.0 --activate
+```
+
 If you want to test your project locally, you can use the following commands:
 
 ```bash
@@ -30,10 +37,10 @@ If you want to test your project locally, you can use the following commands:
 yarn dfx:start
 
 # Installs the dependencies
-yarn frontend:install
+yarn install
 
 # Builds the frontend
-yarn frontend:build
+yarn build
 
 # Deploys your canisters to the replica and generates your candid interface
 yarn dfx:deploy
