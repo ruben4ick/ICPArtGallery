@@ -1,13 +1,15 @@
 # React TypeScript Project Conventions
 
-## READ THIS!!! OR I WILL REACH YOU (c) Bigdo
-
 This document outlines the conventions and best practices for naming and organizing code in a React TypeScript project.
 
 ## General Naming Conventions
 
 - **File Names**: Use kebab-case for file names. For example, `my-component.tsx`.
 - **Directories**: Use kebab-case for directory names. For example, `my-components`.
+
+## Component Organization
+
+- **Component Directory**: Group components by placing each component's `.tsx` and `.scss` files in the same directory under `components/`. For example, `components/my-component/my-component.tsx` and `components/my-component/my-component.scss`.
 
 ## Component Naming
 
@@ -47,7 +49,7 @@ This document outlines the conventions and best practices for naming and organiz
 
 ## CSS Modules
 
-- **CSS Module Files**: Use kebab-case and `.module.css` or `.module.scss` extension. For example, `my-component.module.css`.
+- **CSS Module Files**: Use kebab-case and `.module.scss` extension. For example, `my-component.module.scss`.
 - **Class Names**: Use camelCase for CSS class names. For example, `.myComponent`.
 
 ## Testing
@@ -59,9 +61,9 @@ This document outlines the conventions and best practices for naming and organiz
 Here is an example of a simple component following these conventions:
 
 ```typescript
-// src/components/my-component.tsx
+// src/components/my-component/my-component.tsx
 import React from 'react';
-import styles from './my-component.module.css';
+import styles from './my-component.module.scss';
 
 interface MyComponentProps {
   userName: string;
