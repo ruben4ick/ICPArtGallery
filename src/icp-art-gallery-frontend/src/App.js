@@ -31,9 +31,7 @@ class App {
       </main>
     `;
     render(body, document.getElementById('root'));
-    document
-      .querySelector('form')
-      .addEventListener('submit', this.#handleSubmit);
+    document.querySelector('form').addEventListener('submit', this.#handleSubmit);
   }
 }
 

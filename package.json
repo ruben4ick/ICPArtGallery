@@ -13,11 +13,18 @@
     "frontend:start": "yarn workspace icp-art-gallery-frontend start",
     "start": "yarn frontend:start",
     "dfx:stop": "dfx stop",
-    "stop": "yarn dfx:stop "
+    "stop": "yarn dfx:stop ",
+    "prepare": "husky",
+    "hook:precommit": "node .husky/precommit-check.js",
+    "check": "yarn workspace icp-art-gallery-frontend check",
+    "fix": "yarn workspace icp-art-gallery-frontend fix"
   },
   "type": "module",
   "workspaces": [
     "src/icp-art-gallery-frontend",
     "src/icp-art-gallery-backend"
-  ]
+  ],
+  "devDependencies": {
+    "eslint-plugin-react": "^7.37.4"
+  }
 }
