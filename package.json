@@ -4,15 +4,20 @@
     "npm": ">=7.0.0"
   },
   "name": "icp-art-gallery",
+  "private": true,
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "prebuild": "npm run prebuild --workspaces --if-present",
-    "pretest": "npm run prebuild --workspaces --if-present",
-    "start": "npm start --workspaces --if-present",
-    "test": "npm test --workspaces --if-present"
+    "dfx:start": "dfx start --background",
+    "frontend:install": "yarn workspace icp-art-gallery-frontend install",
+    "frontend:build": "yarn workspace icp-art-gallery-frontend build",
+    "dfx:deploy": "dfx deploy",
+    "frontend:start": "yarn workspace icp-art-gallery-frontend start",
+    "start": "yarn frontend:start",
+    "dfx:stop": "dfx stop",
+    "stop": "yarn dfx:stop "
   },
   "type": "module",
   "workspaces": [
-    "src/icp-art-gallery-frontend"
+    "src/icp-art-gallery-frontend",
+    "src/icp-art-gallery-backend"
   ]
 }
