@@ -20,6 +20,7 @@ target/
 node_modules/
 dist/
 .svelte-kit/
+.yarn/
 
 # environment variables
 .env

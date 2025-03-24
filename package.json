@@ -4,15 +4,26 @@
     "npm": ">=7.0.0"
   },
   "name": "icp-art-gallery",
+  "private": true,
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "prebuild": "npm run prebuild --workspaces --if-present",
-    "pretest": "npm run prebuild --workspaces --if-present",
-    "start": "npm start --workspaces --if-present",
-    "test": "npm test --workspaces --if-present"
+    "dfx:start": "dfx start --background",
+    "frontend:install": "yarn workspace icp-art-gallery-frontend install",
+    "frontend:build": "yarn workspace icp-art-gallery-frontend build",
+    "build": "yarn frontend:build",
+    "dfx:deploy": "dfx deploy",
+    "frontend:start": "yarn workspace icp-art-gallery-frontend start",
+    "start": "yarn frontend:start",
+    "dfx:stop": "dfx stop",
+    "stop": "yarn dfx:stop ",
+    "prepare": "husky",
+    "hook:precommit": "node .husky/precommit-check.js",
+    "check": "yarn workspace icp-art-gallery-frontend check",
+    "fix": "yarn workspace icp-art-gallery-frontend fix"
   },
   "type": "module",
   "workspaces": [
-    "src/icp-art-gallery-frontend"
-  ]
+    "src/icp-art-gallery-frontend",
+    "src/icp-art-gallery-backend"
+  ],
+  "packageManager": "yarn@4.7.0+sha512.5a0afa1d4c1d844b3447ee3319633797bcd6385d9a44be07993ae52ff4facabccafb4af5dcd1c2f9a94ac113e5e9ff56f6130431905884414229e284e37bb7c9"
 }
