@@ -27,29 +27,32 @@ If you want to test your project locally, you can use the following commands:
 
 ```bash
 # Starts the replica, running in the background
-dfx start --background
+yarn dfx:start
+
+# Installs the dependencies
+yarn frontend:install
+
+# Builds the frontend
+yarn frontend:build
 
 # Deploys your canisters to the replica and generates your candid interface
-dfx deploy
+yarn dfx:deploy
+
+# Starts the frontend
+yarn start
 ```
 
 Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
 
-If you have made changes to your backend canister, you can generate a new candid interface with
+~~If you have made changes to your backend canister, you can generate a new candid interface with~~
+> Dear Andriy and Anton, please pay attention to thing that must have been here. this script is not working as it doesn't exist in package.json
+> I'd add it by myself, but I don't understand what it should do. Please, investigate and tell me what to do with it.
 
 ```bash
-npm run generate
+npm run generate # not working
 ```
 
-at any time. This is recommended before starting the frontend development server, and will be run automatically any time you run `dfx deploy`.
-
-If you are making frontend changes, you can start a development server with
-
-```bash
-npm start
-```
-
-Which will start a server at `http://localhost:8080`, proxying API requests to the replica at port 4943.
+~~at any time. This is recommended before starting the frontend development server, and will be run automatically any time you run `dfx deploy`.~~
 
 ### Note on frontend environment variables
 
