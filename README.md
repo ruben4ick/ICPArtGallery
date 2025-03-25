@@ -56,6 +56,8 @@ Once the job completes, your application will be available at `http://localhost:
 
 ```bash
 npm run generate # not working
+
+dfx generate # could be this one
 ```
 
 ~~at any time. This is recommended before starting the frontend development server, and will be run automatically any time you run `dfx deploy`.~~

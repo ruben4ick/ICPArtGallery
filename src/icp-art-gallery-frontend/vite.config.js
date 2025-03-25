@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'url';
 import environment from 'vite-plugin-environment';
 import dotenv from 'dotenv';
@@ -23,9 +24,13 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    watch: {
+      usePolling: true
+    },
   },
   publicDir: "assets",
   plugins: [
+    react(),
     environment("all", { prefix: "CANISTER_" }),
     environment("all", { prefix: "DFX_" }),
   ],
