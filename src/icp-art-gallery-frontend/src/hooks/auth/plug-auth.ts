@@ -5,40 +5,40 @@ import type { _SERVICE } from '../../../../declarations/icp-art-gallery-backend/
 const canisterId = import.meta.env.VITE_CANISTER_ID_ICP_ART_GALLERY_BACKEND;
 
 export const loginWithPlug = async (): Promise<string | null> => {
-    const isPlugAvailable = typeof window !== 'undefined' && window.ic?.plug;
+  const isPlugAvailable = typeof window !== 'undefined' && window.ic?.plug;
 
-    if (!isPlugAvailable) {
-        alert('Plug Wallet not found. Please install the extension.');
-        return null;
-    }
+  if (!isPlugAvailable) {
+    alert('Plug Wallet not found. Please install the extension.');
+    return null;
+  }
 
-    const connected = await window.ic?.plug?.requestConnect({
-        whitelist: [canisterId],
-        host: "https://icp0.io"
-    });
+  const connected = await window.ic?.plug?.requestConnect({
+    whitelist: [canisterId],
+    host: 'https://icp0.io'
+  });
 
-    if (!connected) {
-        alert('Plug connection rejected.');
-        return null;
-    }
+  if (!connected) {
+    alert('Plug connection rejected.');
+    return null;
+  }
 
-    const principal = await window.ic?.plug?.getPrincipal();
-    return principal?.toText() ?? null;
+  const principal = await window.ic?.plug?.getPrincipal();
+  return principal?.toText() ?? null;
 };
 
 export const createPlugActor = async () => {
-    const plugAgent = window.ic?.plug?.agent;
+  const plugAgent = window.ic?.plug?.agent;
 
-    if (!plugAgent) {
-        throw new Error("Plug agent not initialized. Try connecting first.");
-    }
+  if (!plugAgent) {
+    throw new Error('Plug agent not initialized. Try connecting first.');
+  }
 
-    return Actor.createActor<_SERVICE>(backendIDL, {
-        agent: plugAgent,
-        canisterId,
-    });
+  return Actor.createActor<_SERVICE>(backendIDL, {
+    agent: plugAgent,
+    canisterId
+  });
 };
 
 export const logoutPlug = () => {
-    console.log("User manually disconnected.");
+  console.log('User manually disconnected.');
 };

@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Eczar:wght@400..800&display=swap'); //400-800
 @import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap'); //200-800
 
-.head-text a{
+.head-text a {
   text-decoration: none;
   color: inherit;
 }
-.head-text{
-  font-family: "Karla", sans-serif;
+.head-text {
+  font-family: 'Karla', sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
@@ -14,7 +14,7 @@
   color: rgb(var(--color-circle));
   margin-left: 3%;
 }
-.head-glass{
+.head-glass {
   position: fixed;
   display: flex;
   align-items: center;

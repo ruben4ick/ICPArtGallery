@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { icp_art_gallery_backend } from '../../declarations/icp-art-gallery-backend';
-import { Navbar }  from './components/@navbar/Navbar'
+import { Navbar } from './components/@navbar/Navbar';
 import './index.scss';
-import PlugLogin from "./components/@wallet-login/PlugLogin";
+import PlugLogin from './components/@wallet-login/PlugLogin';
 
 /* TODO: fix hook for connection */
 const App: React.FC = () => {
@@ -16,18 +16,18 @@ const App: React.FC = () => {
   };
 
   return (
-      <main>
-          <Navbar/>
-          <br/>
-          <br/>
-          <form onSubmit={handleSubmit}>
-              <label htmlFor="name">Enter your name: &nbsp;</label>
-              <input id="name" onChange={(e) => setName(e.target.value)} type="text" value={name}/>
-              <button type="submit">Click Me!</button>
-          </form>
-          <section id="greeting">{greeting}</section>
-          <PlugLogin/>
-      </main>
+    <main>
+      <Navbar />
+      <br />
+      <br />
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="name">Enter your name: &nbsp;</label>
+        <input id="name" onChange={(e) => setName(e.target.value)} type="text" value={name} />
+        <button type="submit">Click Me!</button>
+      </form>
+      <section id="greeting">{greeting}</section>
+      <PlugLogin />
+    </main>
   );
 };
 
