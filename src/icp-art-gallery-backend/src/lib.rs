@@ -1,4 +1,134 @@
-#[ic_cdk::query]
-fn greet(name: String) -> String {
-    format!("Hello, {}!", name)
+use ic_cdk::api;
+use ic_cdk_macros::{init, query, update, post_upgrade, pre_upgrade};
+use std::cell::RefCell;
+use std::collections::{HashMap, HashSet};
+use candid::{CandidType, Deserialize, Principal};
+use ic_certified_map::{AsHashTree, Hash};
+use ic_cdk::storage;
+
+mod http;
+use http::add_certified_nft;
+
+thread_local! {
+    static STATE: RefCell<State> = RefCell::new(State::default());
+}
+
+#[derive(CandidType, Deserialize, Default)]
+struct State {
+    nfts: Vec<NFT>,
+    custodians: HashSet<Principal>,
+}
+
+#[derive(CandidType, Deserialize)]
+struct StableState {
+    state: State,
+    certified: Vec<(String, Hash)>,
+}
+
+#[pre_upgrade]
+fn pre_upgrade() {
+    let state = STATE.with(|s| s.replace(State::default()));
+    let certified = http::CERTIFIED.with(|c| {
+        c.borrow().iter().map(|(k, v)| (k.clone(), *v)).collect()
+    });
+
+    let stable = StableState { state, certified };
+    storage::stable_save((stable,)).unwrap();
+}
+
+#[post_upgrade]
+fn post_upgrade() {
+    if let Ok((StableState { state, certified },)) = storage::stable_restore() {
+        STATE.with(|s| s.replace(state));
+        http::CERTIFIED.with(|c| {
+            let mut tree = c.borrow_mut();
+            *tree = ic_certified_map::RbTree::from_iter(certified);
+            let root = ic_certified_map::labeled_hash(b"http_assets", &tree.root_hash());
+            api::set_certified_data(&root);
+        });
+    } else {
+        ic_cdk::println!("Failed to restore stable state. State was reset.");
+    }
+}
+
+
+#[derive(CandidType, Deserialize)]
+struct NFT {
+    id: u64,
+    owner: Principal,
+    metadata: Metadata,
+}
+
+#[derive(CandidType, Deserialize, Clone)]
+struct Metadata {
+    name: String,
+    description: String,
+    image_data: Vec<u8>,
+    content_type: String,
+}
+
+#[init]
+fn init() {
+    STATE.with(|s| {
+        let caller = api::caller();
+        s.borrow_mut().custodians.insert(caller);
+    });
+}
+
+#[update]
+fn mint_nft(name: String, description: String, image_data: Vec<u8>, content_type: String) -> u64 {
+    let caller = api::caller();
+    STATE.with(|s| {
+        let mut state = s.borrow_mut();
+        let id = state.nfts.len() as u64;
+        let metadata = Metadata { name, description, image_data: image_data.clone(), content_type };
+        let nft = NFT { id, owner: caller, metadata };
+        state.nfts.push(nft);
+        add_certified_nft(id, &image_data);
+        id
+    })
+}
+
+
+#[query]
+fn get_nfts(owner: Principal) -> Vec<Metadata> {
+    STATE.with(|s| {
+        s.borrow().nfts.iter()
+            .filter(|n| n.owner == owner)
+            .map(|n| n.metadata.clone())
+            .collect()
+    })
+}
+
+#[query]
+fn get_nft(id: u64) -> Option<Metadata> {
+    STATE.with(|s| {
+        s.borrow().nfts.get(id as usize).map(|n| n.metadata.clone())
+    })
+}
+
+#[update]
+fn transfer_nft(id: u64, to: Principal) {
+    let caller = api::caller();
+    STATE.with(|s| {
+        let mut state = s.borrow_mut();
+        if let Some(nft) = state.nfts.get_mut(id as usize) {
+            if nft.owner == caller {
+                nft.owner = to;
+            }
+        }
+    });
+}
+
+#[update]
+fn burn_nft(id: u64) {
+    let caller = api::caller();
+    STATE.with(|s| {
+        let mut state = s.borrow_mut();
+        if let Some(nft) = state.nfts.get(id as usize) {
+            if nft.owner == caller {
+                state.nfts.remove(id as usize);
+            }
+        }
+    });
 }

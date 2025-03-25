@@ -1,3 +1,31 @@
 service : {
-    "greet": (text) -> (text) query;
+  "mint_nft": (text, text, vec nat8, text) -> (nat64);
+
+  "get_nft": (nat64) -> (opt record {
+    name: text;
+    description: text;
+    image_data: vec nat8;
+    content_type: text;
+  }) query;
+
+  "get_nfts": (principal) -> (vec record {
+    name: text;
+    description: text;
+    image_data: vec nat8;
+    content_type: text;
+  }) query;
+
+  "transfer_nft": (nat64, principal) -> ();
+  "burn_nft": (nat64) -> ();
+
+  "http_request": (record {
+    method: text;
+    url: text;
+    headers: vec record { text; text };
+    body: vec nat8;
+  }) -> (record {
+    status_code: nat16;
+    headers: vec record { text; text };
+    body: vec nat8;
+  }) query;
 }
