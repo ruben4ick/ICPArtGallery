@@ -158,3 +158,15 @@ fn update_nft_metadata(id: u64, name: Option<String>, description: Option<String
     });
 }
 
+#[update]
+fn mint_many_nfts(names: Vec<String>, descriptions: Vec<String>, images: Vec<Vec<u8>>, content_types: Vec<String>) -> Vec<u64> {
+    let caller = api::caller();
+    let mut nft_ids = Vec::new();
+
+    for ((name, description), (image_data, content_type)) in names.iter().zip(descriptions.iter()).zip(images.iter().zip(content_types.iter())) {
+        let id = mint_nft(name.clone(), description.clone(), image_data.clone(), content_type.clone());
+        nft_ids.push(id);
+    }
+
+    nft_ids
+}

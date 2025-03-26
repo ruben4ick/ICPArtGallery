@@ -25,6 +25,13 @@ service : {
     opt vec nat8, 
     opt text) -> (); 
 
+    "mint_many_nfts": (
+      vec text, 
+      vec text, 
+      vec vec nat8, 
+      vec text
+      ) -> (vec nat64);
+
   "http_request": (record {
     method: text;
     url: text;
