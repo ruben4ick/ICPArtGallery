@@ -1,7 +1,7 @@
 use ic_cdk::api;
 use ic_cdk_macros::{init, query, update, post_upgrade, pre_upgrade};
 use std::cell::RefCell;
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashSet};
 use candid::{CandidType, Deserialize, Principal};
 use ic_certified_map::{AsHashTree, Hash};
 use ic_cdk::storage;
@@ -185,7 +185,7 @@ fn get_user_balance_cycles() -> u64 {
 fn cycles_to_icp(cycles: u64) -> f64 {
     // 1 ICP = 1,000,000,000 cycles
     let icp_per_cycle = 1_000_000_000u64; 
-    
+
     cycles as f64 / icp_per_cycle as f64
 }
 
