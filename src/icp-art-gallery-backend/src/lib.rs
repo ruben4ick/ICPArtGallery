@@ -170,3 +170,13 @@ fn mint_many_nfts(names: Vec<String>, descriptions: Vec<String>, images: Vec<Vec
 
     nft_ids
 }
+
+#[update]
+fn get_user_balance() -> u64 {
+
+    let caller = api::caller(); 
+    
+    let cycles_balance = api::canister_balance();
+    
+    cycles_balance
+}
