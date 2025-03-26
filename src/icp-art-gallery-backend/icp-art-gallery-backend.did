@@ -18,6 +18,13 @@ service : {
   "transfer_nft": (nat64, principal) -> ();
   "burn_nft": (nat64) -> ();
 
+  "update_nft_metadata": (
+    nat64, 
+    opt text, 
+    opt text, 
+    opt vec nat8, 
+    opt text) -> (); 
+
   "http_request": (record {
     method: text;
     url: text;

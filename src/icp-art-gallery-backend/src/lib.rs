@@ -132,3 +132,29 @@ fn burn_nft(id: u64) {
         }
     });
 }
+
+#[update]
+fn update_nft_metadata(id: u64, name: Option<String>, description: Option<String>, image_data: Option<Vec<u8>>, content_type: Option<String>) {
+    let caller = api::caller();
+    STATE.with(|s| {
+        let mut state = s.borrow_mut();
+        if let Some(nft) = state.nfts.get_mut(id as usize) {
+            if nft.owner == caller {
+                if let Some(name) = name {
+                    nft.metadata.name = name;
+                }
+                if let Some(description) = description {
+                    nft.metadata.description = description;
+                }
+                if let Some(image_data) = image_data {
+                    nft.metadata.image_data = image_data.clone();
+                    add_certified_nft(id, &image_data);
+                }
+                if let Some(content_type) = content_type {
+                    nft.metadata.content_type = content_type;
+                }
+            }
+        }
+    });
+}
+
