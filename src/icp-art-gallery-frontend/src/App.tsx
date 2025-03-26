@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { icp_art_gallery_backend } from '../../declarations/icp-art-gallery-backend';
+import { icp_art_gallery_backend } from "../../declarations/icp-art-gallery-backend";
 import { Navbar } from './components/@navbar/Navbar';
 import './index.scss';
 import PlugLogin from './components/@wallet-login/PlugLogin';
+
 
 /* TODO: fix hook for connection */
 const App: React.FC = () => {

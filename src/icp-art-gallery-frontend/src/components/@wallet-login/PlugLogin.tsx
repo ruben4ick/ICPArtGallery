@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Principal } from '@dfinity/principal';
 import { loginWithPlug, createPlugActor, logoutPlug } from '../../hooks/auth/plug-auth';
+import { useAuth } from '../../context/AuthContext';
 
 export const PlugLogin = () => {
-  const [principal, setPrincipal] = useState<string | null>(null);
+  const { principal, setPrincipal } = useAuth();
 
   useEffect(() => {
     if (window.ic?.plug?.sessionManager?.sessionData) {
@@ -18,9 +19,11 @@ export const PlugLogin = () => {
     if (principalId) {
       setPrincipal(principalId);
       await createPlugActor();
-      console.log('Actor created. Ready to call canister methods.');
+    } else {
+      console.warn("Plug login failed or was cancelled.");
     }
   };
+  
 
   const handleLogout = () => {
     logoutPlug();

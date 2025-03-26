@@ -5,25 +5,31 @@ import type { _SERVICE } from '../../../../declarations/icp-art-gallery-backend/
 const canisterId = import.meta.env.VITE_CANISTER_ID_ICP_ART_GALLERY_BACKEND;
 
 export const loginWithPlug = async (): Promise<string | null> => {
-  const isPlugAvailable = typeof window !== 'undefined' && window.ic?.plug;
-
-  if (!isPlugAvailable) {
+  
+  if (!window.ic || !window.ic.plug) {
     alert('Plug Wallet not found. Please install the extension.');
     return null;
   }
-
-  const connected = await window.ic?.plug?.requestConnect({
-    whitelist: [canisterId],
+  const isConnected = await window.ic.plug.isConnected();
+  if (!isConnected) {
+    try {
+      const connected = await window.ic.plug.requestConnect({
+            whitelist: [canisterId],
     host: 'https://icp0.io'
-  });
+      });
 
-  if (!connected) {
-    alert('Plug connection rejected.');
-    return null;
+      if (!connected) {
+        console.warn("Plug connection rejected.");
+        return null;
+      }
+    } catch (e) {
+      console.error("Plug connection error:", e);
+      return null;
+    }
   }
-
-  const principal = await window.ic?.plug?.getPrincipal();
-  return principal?.toText() ?? null;
+  
+  const principal = await window.ic.plug.getPrincipal();
+  return principal.toText();
 };
 
 export const createPlugActor = async () => {
