@@ -172,11 +172,29 @@ fn mint_many_nfts(names: Vec<String>, descriptions: Vec<String>, images: Vec<Vec
 }
 
 #[update]
-fn get_user_balance() -> u64 {
+fn get_user_balance_cycles() -> u64 {
 
     let caller = api::caller(); 
     
     let cycles_balance = api::canister_balance();
     
     cycles_balance
+}
+
+
+fn cycles_to_icp(cycles: u64) -> f64 {
+    // 1 ICP = 1,000,000,000 cycles
+    let icp_per_cycle = 1_000_000_000u64; 
+    
+    cycles as f64 / icp_per_cycle as f64
+}
+
+#[update]
+fn get_user_balance_ICP() -> f64 {
+    
+    let cycles_balance = get_user_balance_cycles();
+    
+    let icp_balance = cycles_to_icp(cycles_balance);
+    
+    icp_balance
 }

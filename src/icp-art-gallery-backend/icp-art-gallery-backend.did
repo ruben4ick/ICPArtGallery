@@ -32,7 +32,9 @@ service : {
       vec text
       ) -> (vec nat64);
   
-  "get_user_balance": () -> (nat64);
+  "get_user_balance_cycles": () -> (nat64);
+
+  "get_user_balance_ICP": () -> (float64);
 
   "http_request": (record {
     method: text;
