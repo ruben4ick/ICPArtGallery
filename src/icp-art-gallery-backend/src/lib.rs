@@ -1,7 +1,7 @@
 use ic_cdk::api;
 use ic_cdk_macros::{init, query, update, post_upgrade, pre_upgrade};
 use std::cell::RefCell;
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashSet};
 use candid::{CandidType, Deserialize, Principal};
 use ic_certified_map::{AsHashTree, Hash};
 use ic_cdk::storage;
@@ -131,4 +131,70 @@ fn burn_nft(id: u64) {
             }
         }
     });
+}
+
+#[update]
+fn update_nft_metadata(id: u64, name: Option<String>, description: Option<String>, image_data: Option<Vec<u8>>, content_type: Option<String>) {
+    let caller = api::caller();
+    STATE.with(|s| {
+        let mut state = s.borrow_mut();
+        if let Some(nft) = state.nfts.get_mut(id as usize) {
+            if nft.owner == caller {
+                if let Some(name) = name {
+                    nft.metadata.name = name;
+                }
+                if let Some(description) = description {
+                    nft.metadata.description = description;
+                }
+                if let Some(image_data) = image_data {
+                    nft.metadata.image_data = image_data.clone();
+                    add_certified_nft(id, &image_data);
+                }
+                if let Some(content_type) = content_type {
+                    nft.metadata.content_type = content_type;
+                }
+            }
+        }
+    });
+}
+
+#[update]
+fn mint_many_nfts(names: Vec<String>, descriptions: Vec<String>, images: Vec<Vec<u8>>, content_types: Vec<String>) -> Vec<u64> {
+    let caller = api::caller();
+    let mut nft_ids = Vec::new();
+
+    for ((name, description), (image_data, content_type)) in names.iter().zip(descriptions.iter()).zip(images.iter().zip(content_types.iter())) {
+        let id = mint_nft(name.clone(), description.clone(), image_data.clone(), content_type.clone());
+        nft_ids.push(id);
+    }
+
+    nft_ids
+}
+
+#[update]
+fn get_user_balance_cycles() -> u64 {
+
+    let caller = api::caller(); 
+    
+    let cycles_balance = api::canister_balance();
+    
+    cycles_balance
+}
+
+
+fn cycles_to_icp(cycles: u64) -> f64 {
+    // 1 ICP = 1,000,000,000 cycles
+    let icp_per_cycle = 1_000_000_000u64; 
+
+    cycles as f64 / icp_per_cycle as f64
+}
+
+#[update]
+fn get_user_balance_ICP() -> f64 {
+    
+    let cycles_balance = get_user_balance_cycles();
+    
+    let icp_balance = cycles_to_icp(cycles_balance);
+    
+    icp_balance
 }

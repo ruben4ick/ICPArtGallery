@@ -18,6 +18,24 @@ service : {
   "transfer_nft": (nat64, principal) -> ();
   "burn_nft": (nat64) -> ();
 
+  "update_nft_metadata": (
+    nat64, 
+    opt text, 
+    opt text, 
+    opt vec nat8, 
+    opt text) -> (); 
+
+  "mint_many_nfts": (
+      vec text, 
+      vec text, 
+      vec vec nat8, 
+      vec text
+      ) -> (vec nat64);
+  
+  "get_user_balance_cycles": () -> (nat64);
+
+  "get_user_balance_ICP": () -> (float64);
+
   "http_request": (record {
     method: text;
     url: text;
