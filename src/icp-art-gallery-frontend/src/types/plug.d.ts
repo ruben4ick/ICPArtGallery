@@ -14,9 +14,7 @@ declare global {
         getAgent: () => HttpAgent;
         getPrincipal: () => Promise<import('@dfinity/principal').Principal>;
         agent?: HttpAgent;
-        sessionManager?: {
-          sessionData?: unknown;
-        };
+        sessionData?: unknown;
       };
     };
   }

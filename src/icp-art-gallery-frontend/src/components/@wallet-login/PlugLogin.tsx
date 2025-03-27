@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Principal } from '@dfinity/principal';
-import { loginWithPlug, createPlugActor, logoutPlug } from '../../hooks/auth/plug-auth';
-import { useAuth } from '../../context/AuthContext';
+import { loginWithPlug, createPlugActor, logoutPlug } from '../../hooks/wallet-login/plug-auth';
+import { useAuth } from '../../context/@wallet-login/AuthContext';
 
 export const PlugLogin = () => {
   const { principal, setPrincipal } = useAuth();
 
   useEffect(() => {
-    if (window.ic?.plug?.sessionManager?.sessionData) {
+    if (window.ic?.plug?.sessionData) {
       window.ic.plug.getPrincipal().then((p: Principal) => {
         setPrincipal(p.toText());
       });
@@ -18,7 +18,7 @@ export const PlugLogin = () => {
     const principalId = await loginWithPlug();
     if (principalId) {
       setPrincipal(principalId);
-      await createPlugActor();
+      createPlugActor();
     } else {
       console.warn("Plug login failed or was cancelled.");
     }
@@ -34,17 +34,18 @@ export const PlugLogin = () => {
     <div style={{ padding: '1rem' }}>
       {principal ? (
         <div>
-          <p>
-            ✅ Connected as: <code>{principal}</code>
-          </p>
-          <button onClick={handleLogout} type="button">
-            Disconnect
-          </button>
+          <span className="head-text" onClick={handleLogout}>
+            <a href="">
+              .disconnect
+            </a>
+          </span>
         </div>
       ) : (
-        <button onClick={handleLogin} type="button">
-          🔌 Connect with Plug Wallet
-        </button>
+        <span className="head-text" onClick={handleLogin}>
+          <a href="">
+            .connect_plug
+          </a>
+        </span>
       )}
     </div>
   );

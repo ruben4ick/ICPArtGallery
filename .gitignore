@@ -19,6 +19,7 @@ src/icp-art-gallery-frontend/src/target/
 # frontend code
 node_modules/
 dist/
+target/
 .svelte-kit/
 .yarn/
 
