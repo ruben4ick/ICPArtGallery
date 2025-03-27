@@ -8,9 +8,9 @@ export const Navbar = () => {
       <div className="head-text">
         <a href="/">.gallery</a>
       </div>
-        <div className="head-text ml-auto">
-            <PlugLogin />
-        </div>
+      <div className="head-text ml-auto">
+        <PlugLogin />
+      </div>
     </div>
   );
 };
