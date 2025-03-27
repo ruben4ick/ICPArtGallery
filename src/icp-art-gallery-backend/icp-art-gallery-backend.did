@@ -42,7 +42,7 @@ service : {
   
   "get_user_balance_cycles": () -> (nat64);
 
-  "get_user_balance_ICP": () -> (float64);
+  "get_user_balance_icp": () -> (float64);
 
   "transfer_cycles": (principal, nat64) -> ();
 
