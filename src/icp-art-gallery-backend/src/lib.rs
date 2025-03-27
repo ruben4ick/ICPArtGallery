@@ -1,13 +1,14 @@
 use ic_cdk::api;
 use ic_cdk_macros::{init, query, update, post_upgrade, pre_upgrade};
 use std::cell::RefCell;
-use std::collections::{HashSet};
+use std::collections::{HashSet, HashMap};
 use candid::{CandidType, Deserialize, Principal};
 use ic_certified_map::{AsHashTree, Hash};
 use ic_cdk::storage;
 
 mod http;
 use http::add_certified_nft;
+
 
 thread_local! {
     static STATE: RefCell<State> = RefCell::new(State::default());
@@ -17,12 +18,30 @@ thread_local! {
 struct State {
     nfts: Vec<NFT>,
     custodians: HashSet<Principal>,
+
+    // NFT ID -> Price in cycles (ICP)
+    listings: HashMap<u64, u64>, 
 }
 
 #[derive(CandidType, Deserialize)]
 struct StableState {
     state: State,
     certified: Vec<(String, Hash)>,
+}
+
+#[derive(CandidType, Deserialize)]
+struct NFT {
+    id: u64,
+    owner: Principal,
+    metadata: Metadata,
+}
+
+#[derive(CandidType, Deserialize, Clone)]
+struct Metadata {
+    name: String,
+    description: String,
+    image_data: Vec<u8>,
+    content_type: String,
 }
 
 #[pre_upgrade]
@@ -49,22 +68,6 @@ fn post_upgrade() {
     } else {
         ic_cdk::println!("Failed to restore stable state. State was reset.");
     }
-}
-
-
-#[derive(CandidType, Deserialize)]
-struct NFT {
-    id: u64,
-    owner: Principal,
-    metadata: Metadata,
-}
-
-#[derive(CandidType, Deserialize, Clone)]
-struct Metadata {
-    name: String,
-    description: String,
-    image_data: Vec<u8>,
-    content_type: String,
 }
 
 #[init]
