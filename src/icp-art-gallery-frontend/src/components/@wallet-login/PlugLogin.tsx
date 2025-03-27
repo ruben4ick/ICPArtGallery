@@ -20,10 +20,9 @@ export const PlugLogin = () => {
       setPrincipal(principalId);
       createPlugActor();
     } else {
-      console.warn("Plug login failed or was cancelled.");
+      console.warn('Plug login failed or was cancelled.');
     }
   };
-  
 
   const handleLogout = () => {
     logoutPlug();
@@ -35,16 +34,12 @@ export const PlugLogin = () => {
       {principal ? (
         <div>
           <span className="head-text" onClick={handleLogout}>
-            <a href="">
-              .disconnect
-            </a>
+            <a href="">.disconnect</a>
           </span>
         </div>
       ) : (
         <span className="head-text" onClick={handleLogin}>
-          <a href="">
-            .connect_plug
-          </a>
+          <a href="">.connect_plug</a>
         </span>
       )}
     </div>

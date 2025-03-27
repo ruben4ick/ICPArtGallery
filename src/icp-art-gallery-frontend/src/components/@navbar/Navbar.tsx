@@ -1,5 +1,5 @@
 import './style.scss';
-import PlugLogin from "../@wallet-login/PlugLogin";
+import PlugLogin from '../@wallet-login/PlugLogin';
 
 export const Navbar = () => {
   return (
@@ -10,10 +10,10 @@ export const Navbar = () => {
       <div className="head-text">
         <a href="/gallery">.gallery</a>
       </div>
-        <div className="head-text">
+      <div className="head-text">
         <a href="/profile">.profile</a>
       </div>
-        <PlugLogin/>
+      <PlugLogin />
     </div>
   );
 };

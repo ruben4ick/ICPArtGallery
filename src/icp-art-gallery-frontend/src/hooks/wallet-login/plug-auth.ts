@@ -1,11 +1,10 @@
-import {Actor} from '@dfinity/agent';
-import {idlFactory as backendIDL} from '../../../../declarations/icp-art-gallery-backend';
-import type {_SERVICE} from '../../../../declarations/icp-art-gallery-backend/icp-art-gallery-backend.did.d.ts';
+import { Actor } from '@dfinity/agent';
+import { idlFactory as backendIDL } from '../../../../declarations/icp-art-gallery-backend';
+import type { _SERVICE } from '../../../../declarations/icp-art-gallery-backend/icp-art-gallery-backend.did.d.ts';
 
 const canisterId = import.meta.env.VITE_CANISTER_ID_ICP_ART_GALLERY_BACKEND;
 
 export const loginWithPlug = async (): Promise<string | null> => {
-  
   if (!window.ic || !window.ic.plug) {
     alert('Plug Wallet not found. Please install the extension.');
     return null;
@@ -14,20 +13,20 @@ export const loginWithPlug = async (): Promise<string | null> => {
   if (!isConnected) {
     try {
       const connected = await window.ic.plug.requestConnect({
-            whitelist: [canisterId],
-            host: 'https://icp0.io'
+        whitelist: [canisterId],
+        host: 'https://icp0.io'
       });
 
       if (!connected) {
-        console.warn("Plug connection rejected.");
+        console.warn('Plug connection rejected.');
         return null;
       }
     } catch (e) {
-      console.error("Plug connection error:", e);
+      console.error('Plug connection error:', e);
       return null;
     }
   }
-  
+
   const principal = await window.ic.plug.getPrincipal();
   return principal.toText();
 };
