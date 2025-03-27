@@ -1,19 +1,16 @@
+import '../../index.scss';
 import './style.scss';
 import PlugLogin from '../@wallet-login/PlugLogin';
 
 export const Navbar = () => {
   return (
-    <div className="head-glass">
+    <div className="head-glass flex">
       <div className="head-text">
-        <a href="/src/icp-art-gallery-frontend/src/static">.main</a>
+        <a href="/">.gallery</a>
       </div>
-      <div className="head-text">
-        <a href="/gallery">.gallery</a>
-      </div>
-      <div className="head-text">
-        <a href="/profile">.profile</a>
-      </div>
-      <PlugLogin />
+        <div className="head-text ml-auto">
+            <PlugLogin />
+        </div>
     </div>
   );
 };

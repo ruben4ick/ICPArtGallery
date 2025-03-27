@@ -30,7 +30,7 @@ export const PlugLogin = () => {
   };
 
   return (
-    <div style={{ padding: '1rem' }}>
+    <div>
       {principal ? (
         <div>
           <span className="head-text" onClick={handleLogout}>
