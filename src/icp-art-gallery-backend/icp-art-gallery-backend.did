@@ -44,6 +44,8 @@ service : {
 
   "get_user_balance_ICP": () -> (float64);
 
+  "transfer_cycles": (principal, nat64) -> ();
+
   "http_request": (record {
     method: text;
     url: text;

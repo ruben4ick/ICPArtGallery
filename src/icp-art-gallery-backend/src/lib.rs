@@ -1,5 +1,6 @@
 use ic_cdk::api;
 use ic_cdk_macros::{init, query, update, post_upgrade, pre_upgrade};
+use sha2::digest::consts::True;
 use std::cell::RefCell;
 use std::collections::{HashSet, HashMap};
 use candid::{CandidType, Deserialize, Principal};
@@ -148,8 +149,17 @@ fn buy_nft(id: u64) {
                 if nft.owner != buyer {
                     let cycles_balance = api::canister_balance();
                     if cycles_balance > price {
-                        transfer_nft(id, buyer);
-                        state.listings.remove(&id);
+                        
+                        let result = transfer_cycles(buyer, price);
+                        
+                        if result {
+
+                            transfer_nft(id, buyer);
+
+                            state.listings.remove(&id);
+
+                        }
+
                     }
                 }
             }
@@ -254,4 +264,16 @@ fn get_user_balance_ICP() -> f64 {
     let icp_balance = cycles_to_icp(cycles_balance);
     
     icp_balance
+}
+
+#[update]
+fn transfer_cycles(to: Principal, amount: u64) -> bool {
+
+    let caller = api::caller(); 
+
+    // implement the transfer (didnt see permit of direct transfer in icp standart)
+
+    let result = true;
+
+    result
 }
