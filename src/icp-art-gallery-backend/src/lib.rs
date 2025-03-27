@@ -78,6 +78,7 @@ fn init() {
     });
 }
 
+// MARK: basic work with NFT
 #[update]
 fn mint_nft(name: String, description: String, image_data: Vec<u8>, content_type: String) -> u64 {
     let caller = api::caller();
@@ -121,6 +122,59 @@ fn transfer_nft(id: u64, to: Principal) {
             }
         }
     });
+}
+
+// MARK: Marketplave functionality
+#[update]
+fn list_nft(id: u64, price: u64) {
+    let caller = api::caller();
+    STATE.with(|s| {
+        let mut state = s.borrow_mut();
+        if let Some(nft) = state.nfts.get(id as usize) {
+            if nft.owner == caller {
+                state.listings.insert(id, price);
+            }
+        }
+    });
+}
+
+#[update]
+fn buy_nft(id: u64) {
+    let buyer = api::caller();
+    STATE.with(|s| {
+        let mut state = s.borrow_mut();
+        if let Some(&price) = state.listings.get(&id) {
+            if let Some(nft) = state.nfts.get_mut(id as usize) {
+                if nft.owner != buyer {
+                    let cycles_balance = api::canister_balance();
+                    if cycles_balance > price {
+                        transfer_nft(id, buyer);
+                        state.listings.remove(&id);
+                    }
+                }
+            }
+        }
+    });
+}
+
+#[update]
+fn cancel_listing(id: u64) {
+    let caller = api::caller();
+    STATE.with(|s| {
+        let mut state = s.borrow_mut();
+        if let Some(nft) = state.nfts.get(id as usize) {
+            if nft.owner == caller {
+                state.listings.remove(&id);
+            }
+        }
+    });
+}
+
+#[query]
+fn get_listings() -> Vec<(u64, u64)> {
+    STATE.with(|s| {
+        s.borrow().listings.iter().map(|(id, price)| (*id, *price)).collect()
+    })
 }
 
 #[update]

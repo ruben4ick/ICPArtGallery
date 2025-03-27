@@ -31,6 +31,14 @@ service : {
       vec vec nat8, 
       vec text
       ) -> (vec nat64);
+
+  "list_nft": (nat64, nat64) -> ();
+
+  "buy_nft": (nat64) -> ();
+
+  "get_listings": () -> (vec record { nat64; nat64 });
+
+  "cancel_listing": (nat64) -> ();
   
   "get_user_balance_cycles": () -> (nat64);
 
