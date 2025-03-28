@@ -35,8 +35,9 @@ struct NFT {
     id: u64,
     owner: Principal,
     metadata: Metadata,
+    created_at: u64,
+    rating: u8,
 }
-
 #[derive(CandidType, Deserialize, Clone)]
 struct Metadata {
     name: String,
@@ -69,23 +70,6 @@ fn post_upgrade() {
     } else {
         ic_cdk::println!("Failed to restore stable state. State was reset.");
     }
-}
-
-#[derive(CandidType, Deserialize)]
-struct NFT {
-    id: u64,
-    owner: Principal,
-    metadata: Metadata,
-    created_at: u64,
-    rating: u8,
-}
-
-#[derive(CandidType, Deserialize, Clone)]
-struct Metadata {
-    name: String,
-    description: String,
-    image_data: Vec<u8>,
-    content_type: String,
 }
 
 #[derive(CandidType, Deserialize)]
