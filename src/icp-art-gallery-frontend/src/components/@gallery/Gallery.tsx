@@ -17,7 +17,8 @@ const mockCards: CardProps[] = Array.from({ length: 12 }).map((_, i) => ({
 }));
 
 const breakpointColumnsObj = {
-  default: 4,
+  default: 5,
+  1920: 4,
   1280: 3,
   1024: 2,
   640: 1
@@ -25,7 +26,7 @@ const breakpointColumnsObj = {
 
 export const Gallery = () => {
   return (
-    <div className="px-4">
+    <div className="justify-center px-4 w-full ml-[2%] mr-[2%]">
       <Masonry
         breakpointCols={breakpointColumnsObj}
         className="masonry-grid"
