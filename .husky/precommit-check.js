@@ -9,6 +9,15 @@ const run = (cmd) => {
     }
 };
 
+const getChangedFiles = () => {
+    try {
+        const output = execSync('git diff --name-only').toString().trim();
+        return output.split('\n').filter(f => f);
+    } catch {
+        return [];
+    }
+};
+
 console.log('🔍 Running pre-commit check...');
 
 const passed = run('yarn check');
@@ -18,12 +27,20 @@ if (!passed) {
     const fixed = run('yarn fix');
 
     if (fixed) {
-        console.log('📥 Adding fixed files...');
-        const added = run('git add .');
+        const changedFiles = getChangedFiles();
 
-        if (!added) {
-            console.error('💥 Failed to add fixed files. Commit aborted.');
-            process.exit(1);
+        if (changedFiles.length > 0) {
+            console.log('📥 Adding fixed files:');
+            changedFiles.forEach(file => console.log(`  - ${file}`));
+            const addCmd = `git add ${changedFiles.map(f => `"${f}"`).join(' ')}`;
+            const added = run(addCmd);
+
+            if (!added) {
+                console.error('💥 Failed to add fixed files. Commit aborted.');
+                process.exit(1);
+            }
+        } else {
+            console.log('ℹ️ No files changed by fix.');
         }
 
         console.log('🔁 Re-running check...');
