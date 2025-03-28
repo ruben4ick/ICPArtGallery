@@ -1,6 +1,6 @@
 // complete interface
 export default interface CardProps {
-    name?: string;
-    likePercentage?: number;
-    imageLink?: string;
+  name?: string;
+  likePercentage?: number;
+  imageLink?: string;
 }
