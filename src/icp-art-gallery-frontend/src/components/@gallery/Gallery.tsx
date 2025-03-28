@@ -11,7 +11,7 @@ const images = [
   'https://i.pinimg.com/736x/01/76/b7/0176b79f2a499b6cee63de3a590c8609.jpg'
 ];
 const mockCards: CardProps[] = Array.from({ length: 12 }).map((_, i) => ({
-  name: `.сard ${i + 1}`,
+  name: `.card ${i + 1}`,
   like_percentage: Math.floor(Math.random() * 100),
   imageLink: images[i % images.length]
 }));
