@@ -52,11 +52,12 @@ yarn start
 Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
 
 ~~If you have made changes to your backend canister, you can generate a new candid interface with~~
-> Dear Andriy and Anton, please pay attention to thing that must have been here. this script is not working as it doesn't exist in package.json
-> I'd add it by myself, but I don't understand what it should do. Please, investigate and tell me what to do with it.
+> Dear Andriy and Anton, please pay attention to thing that must have been here. This script is not working as it doesn't exist in package.json. I'd add it by myself, but I don't understand what it should do. Please, investigate and tell me what to do with it.
 
 ```bash
 npm run generate # not working
+
+dfx generate # could be this one
 ```
 
 ~~at any time. This is recommended before starting the frontend development server, and will be run automatically any time you run `dfx deploy`.~~

@@ -16,7 +16,7 @@
     "dfx:stop": "dfx stop",
     "stop": "yarn dfx:stop ",
     "prepare": "husky",
-    "hook:precommit": "node .husky/precommit-check.js",
+    "hook:precommit": "node .husky/precommit-check.ts",
     "check": "yarn workspace icp-art-gallery-frontend check",
     "fix": "yarn workspace icp-art-gallery-frontend fix"
   },
