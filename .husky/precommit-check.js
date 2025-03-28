@@ -1,4 +1,3 @@
-// .husky/precommit-check.js
 import { execSync } from 'node:child_process';
 
 const run = (cmd) => {
@@ -19,6 +18,14 @@ if (!passed) {
     const fixed = run('yarn fix');
 
     if (fixed) {
+        console.log('📥 Adding fixed files...');
+        const added = run('git add .');
+
+        if (!added) {
+            console.error('💥 Failed to add fixed files. Commit aborted.');
+            process.exit(1);
+        }
+
         console.log('🔁 Re-running check...');
         const finalCheck = run('yarn check');
         if (!finalCheck) {
