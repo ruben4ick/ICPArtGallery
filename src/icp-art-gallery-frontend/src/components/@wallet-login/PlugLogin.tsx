@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Principal } from '@dfinity/principal';
 import { loginWithPlug, createPlugActor, logoutPlug } from '../../hooks/wallet-login/plug-auth';
 import { useAuth } from '../../context/@wallet-login/AuthContext';
+import '../../index.scss';
 
 export const PlugLogin = () => {
   const { principal, setPrincipal } = useAuth();
@@ -30,17 +31,11 @@ export const PlugLogin = () => {
   };
 
   return (
-    <div style={{ padding: '1rem' }}>
+    <div>
       {principal ? (
-        <div>
-          <span className="head-text" onClick={handleLogout}>
-            <a href="">.disconnect</a>
-          </span>
-        </div>
+          <button type="button" className="head-text cursor-pointer" onClick={handleLogout}>.disconnect</button>
       ) : (
-        <span className="head-text" onClick={handleLogin}>
-          <a href="">.connect_plug</a>
-        </span>
+          <button type="button" className="head-text cursor-pointer" onClick={handleLogin}>.connect_plug</button>
       )}
     </div>
   );
