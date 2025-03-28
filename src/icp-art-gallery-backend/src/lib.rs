@@ -3,6 +3,7 @@ use ic_cdk_macros::{init, query, update, post_upgrade, pre_upgrade};
 use std::cell::RefCell;
 use std::collections::{HashSet, HashMap};
 use candid::{CandidType, Deserialize, Principal};
+use ic_cdk::api::time;
 use ic_certified_map::{AsHashTree, Hash};
 use ic_cdk::storage;
 
@@ -70,6 +71,30 @@ fn post_upgrade() {
     }
 }
 
+#[derive(CandidType, Deserialize)]
+struct NFT {
+    id: u64,
+    owner: Principal,
+    metadata: Metadata,
+    created_at: u64,
+    rating: u8,
+}
+
+#[derive(CandidType, Deserialize, Clone)]
+struct Metadata {
+    name: String,
+    description: String,
+    image_data: Vec<u8>,
+    content_type: String,
+}
+
+#[derive(CandidType, Deserialize)]
+struct NFTView {
+    id: u64,
+    owner: Principal,
+    metadata: Metadata,
+}
+
 #[init]
 fn init() {
     STATE.with(|s| {
@@ -86,21 +111,17 @@ fn mint_nft(name: String, description: String, image_data: Vec<u8>, content_type
         let mut state = s.borrow_mut();
         let id = state.nfts.len() as u64;
         let metadata = Metadata { name, description, image_data: image_data.clone(), content_type };
-        let nft = NFT { id, owner: caller, metadata };
+        let created_at = time();
+        let nft = NFT {
+            id,
+            owner: caller,
+            metadata,
+            created_at,
+            rating: 0, // початковий рейтинг
+        };
         state.nfts.push(nft);
         add_certified_nft(id, &image_data);
         id
-    })
-}
-
-
-#[query]
-fn get_nfts(owner: Principal) -> Vec<Metadata> {
-    STATE.with(|s| {
-        s.borrow().nfts.iter()
-            .filter(|n| n.owner == owner)
-            .map(|n| n.metadata.clone())
-            .collect()
     })
 }
 
@@ -108,6 +129,29 @@ fn get_nfts(owner: Principal) -> Vec<Metadata> {
 fn get_nft(id: u64) -> Option<Metadata> {
     STATE.with(|s| {
         s.borrow().nfts.get(id as usize).map(|n| n.metadata.clone())
+    })
+}
+
+#[query]
+fn get_all_nfts() -> Vec<NFTView> {
+    STATE.with(|s| {
+        s.borrow().nfts.iter()
+            .map(|n| NFTView {
+                id: n.id,
+                owner: n.owner,
+                metadata: n.metadata.clone(),
+            })
+            .collect()
+    })
+}
+
+#[query]
+fn get_user_nfts(owner: Principal) -> Vec<Metadata> {
+    STATE.with(|s| {
+        s.borrow().nfts.iter()
+            .filter(|n| n.owner == owner)
+            .map(|n| n.metadata.clone())
+            .collect()
     })
 }
 
