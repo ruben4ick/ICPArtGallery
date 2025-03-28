@@ -1,4 +1,4 @@
-import { Navbar } from './components/@navbar/Navbar';
+import Navbar from './components/@navbar/Navbar';
 import './index.scss';
 import Gallery from './components/@gallery/Gallery';
 

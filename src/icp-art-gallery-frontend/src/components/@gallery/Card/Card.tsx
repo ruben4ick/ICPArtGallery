@@ -2,15 +2,16 @@ import '../../../index.scss';
 import './style.scss';
 import CardProps from '../interfaces/card-props';
 import { ThumbsUp, ThumbsDown } from 'lucide-react';
-import React, { useState } from 'react';
+import React from 'react';
 import CardModal from '../CardModal/CardModal';
+import useModal from '../../../hooks/modal/use-modal';
 
 // TODO: hook for like
 // TODO: hook for dislike
 // TODO: hook for details
 
 export const Card: React.FC<{ children: CardProps }> = ({ children }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isOpen: isCardOpen, open: openCard, close: closeCard } = useModal();
 
   return (
     <>
@@ -38,16 +39,16 @@ export const Card: React.FC<{ children: CardProps }> = ({ children }) => {
         {/*TODO: add hook for details*/}
         <button
           className="card-btn details-btn mt-[16px] mb-[4%] mx-[4%]"
-          onClick={() => setIsModalOpen(true)}
+          onClick={openCard}
           type="button"
         >
           .details
         </button>
       </div>
 
-      {isModalOpen ? (
+      {isCardOpen ? (
         <div className="fixed w-full h-full flex items-center justify-center inset-0 z-99">
-          <CardModal onClose={() => setIsModalOpen(false)}>{children}</CardModal>
+          <CardModal onClose={closeCard}>{children}</CardModal>
         </div>
       ) : null}
     </>

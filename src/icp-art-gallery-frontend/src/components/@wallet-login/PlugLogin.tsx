@@ -1,8 +1,8 @@
+import '../../index.scss';
 import { useEffect } from 'react';
 import { Principal } from '@dfinity/principal';
 import { loginWithPlug, createPlugActor, logoutPlug } from '../../hooks/wallet-login/plug-auth';
 import { useAuth } from '../../context/@wallet-login/AuthContext';
-import '../../index.scss';
 
 export const PlugLogin = () => {
   const { principal, setPrincipal } = useAuth();
@@ -33,9 +33,13 @@ export const PlugLogin = () => {
   return (
     <div>
       {principal ? (
-          <button type="button" className="head-text cursor-pointer" onClick={handleLogout}>.disconnect</button>
+        <button className="head-text cursor-pointer" onClick={handleLogout} type="button">
+          .disconnect
+        </button>
       ) : (
-          <button type="button" className="head-text cursor-pointer" onClick={handleLogin}>.connect_plug</button>
+        <button className="head-text cursor-pointer" onClick={handleLogin} type="button">
+          .connect_plug
+        </button>
       )}
     </div>
   );

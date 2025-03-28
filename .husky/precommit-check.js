@@ -1,4 +1,3 @@
-// .husky/precommit-check.js
 import { execSync } from 'node:child_process';
 
 const run = (cmd) => {
@@ -7,6 +6,15 @@ const run = (cmd) => {
         return true;
     } catch (e) {
         return false;
+    }
+};
+
+const getChangedFiles = () => {
+    try {
+        const output = execSync('git diff --name-only').toString().trim();
+        return output.split('\n').filter(f => f);
+    } catch {
+        return [];
     }
 };
 
@@ -19,6 +27,22 @@ if (!passed) {
     const fixed = run('yarn fix');
 
     if (fixed) {
+        const changedFiles = getChangedFiles();
+
+        if (changedFiles.length > 0) {
+            console.log('📥 Adding fixed files:');
+            changedFiles.forEach(file => console.log(`  - ${file}`));
+            const addCmd = `git add ${changedFiles.map(f => `"${f}"`).join(' ')}`;
+            const added = run(addCmd);
+
+            if (!added) {
+                console.error('💥 Failed to add fixed files. Commit aborted.');
+                process.exit(1);
+            }
+        } else {
+            console.log('ℹ️ No files changed by fix.');
+        }
+
         console.log('🔁 Re-running check...');
         const finalCheck = run('yarn check');
         if (!finalCheck) {
