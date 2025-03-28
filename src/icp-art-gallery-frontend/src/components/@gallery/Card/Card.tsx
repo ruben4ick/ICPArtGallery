@@ -36,7 +36,6 @@ export const Card: React.FC<{ children: CardProps }> = ({ children }) => {
             <ThumbsDown size={20} />
           </button>
         </div>
-        {/*TODO: add hook for details*/}
         <button
           className="card-btn details-btn mt-[16px] mb-[4%] mx-[4%]"
           onClick={openCard}

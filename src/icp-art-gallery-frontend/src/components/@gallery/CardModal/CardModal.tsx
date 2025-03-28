@@ -41,14 +41,17 @@ export const CardModal: React.FC<CardModalProps> = ({ children, onClose }) => {
         {children.name ? <span>{children.name}</span> : <span>.untitled</span>}
       </div>
       <div className="col-start-2 row-start-2 flex items-center justify-end gap-4 self-center mt-[10px]">
+        <button className="card-btn modal-btn text-[20px]" type="button">
+          .buy
+        </button>
         <button className="card-btn modal-btn" type="button">
-          <ThumbsUp size={20} />
+          <ThumbsUp size={30} />
         </button>
         <span className="like-percent modal-like-percent">
           {children.like_percentage !== null ? `${children.like_percentage}%` : '_null'}
         </span>
         <button className="card-btn modal-btn" type="button">
-          <ThumbsDown size={20} />
+          <ThumbsDown size={30} />
         </button>
       </div>
     </div>
