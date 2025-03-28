@@ -1,11 +1,14 @@
 import { Navbar } from './components/@navbar/Navbar';
 import './index.scss';
+import Gallery from "./components/@gallery/Gallery";
 
-/* TODO: fix hook for connection */
 const App: React.FC = () => {
   return (
     <main>
       <Navbar />
+        <div className="mt-[calc(5vh+20px)]">
+            <Gallery/>
+        </div>
     </main>
   );
 };

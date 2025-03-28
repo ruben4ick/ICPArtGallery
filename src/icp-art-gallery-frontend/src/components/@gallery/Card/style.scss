@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Eczar:wght@400..800&display=swap'); //400-800
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap'); //200-800
+
+.title {
+  font-family: 'Eczar', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 24px;
+  color: rgb(9, 28, 72);
+}
+
+.like-percent {
+  font-weight: 600;
+  color: rgb(9, 28, 72);
+}
+
+
+.details-btn {
+  font-weight: 600;
+  color: rgb(9, 28, 72);
+}
+
+.card-button {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
