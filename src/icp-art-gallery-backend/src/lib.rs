@@ -67,6 +67,13 @@ struct Metadata {
     content_type: String,
 }
 
+#[derive(CandidType, Deserialize)]
+struct NFTView {
+    id: u64,
+    owner: Principal,
+    metadata: Metadata,
+}
+
 #[init]
 fn init() {
     STATE.with(|s| {
@@ -89,21 +96,33 @@ fn mint_nft(name: String, description: String, image_data: Vec<u8>, content_type
     })
 }
 
+#[query]
+fn get_nft(id: u64) -> Option<Metadata> {
+    STATE.with(|s| {
+        s.borrow().nfts.get(id as usize).map(|n| n.metadata.clone())
+    })
+}
 
 #[query]
-fn get_nfts(owner: Principal) -> Vec<Metadata> {
+fn get_all_nfts() -> Vec<NFTView> {
     STATE.with(|s| {
         s.borrow().nfts.iter()
-            .filter(|n| n.owner == owner)
-            .map(|n| n.metadata.clone())
+            .map(|n| NFTView {
+                id: n.id,
+                owner: n.owner,
+                metadata: n.metadata.clone(),
+            })
             .collect()
     })
 }
 
 #[query]
-fn get_nft(id: u64) -> Option<Metadata> {
+fn get_user_nfts(owner: Principal) -> Vec<Metadata> {
     STATE.with(|s| {
-        s.borrow().nfts.get(id as usize).map(|n| n.metadata.clone())
+        s.borrow().nfts.iter()
+            .filter(|n| n.owner == owner)
+            .map(|n| n.metadata.clone())
+            .collect()
     })
 }
 
