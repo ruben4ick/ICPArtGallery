@@ -19,7 +19,7 @@ export const CardModal: React.FC<CardModalProps> = ({ children, onClose }) => {
       <button
         aria-label="Close modal"
         className="card-btn modal-btn modal-close-btn absolute top-2 right-2 text-white p-2 hover:bg-white/10 transition z-10"
-        onClick={onClose}
+        onClick={ onClose }
         type="button"
       >
         <X size={24} />
