@@ -39,15 +39,25 @@ service : {
   ) -> ();
 
   "mint_many_nfts": (
-    vec text,
-    vec text,
-    vec vec nat8,
-    vec text
-  ) -> (vec nat64);
+      vec text, 
+      vec text, 
+      vec vec nat8, 
+      vec text
+      ) -> (vec nat64);
 
+  "list_nft": (nat64, nat64) -> ();
+
+  "buy_nft": (nat64) -> ();
+
+  "get_listings": () -> (vec record { nat64; nat64 });
+
+  "cancel_listing": (nat64) -> ();
+  
   "get_user_balance_cycles": () -> (nat64);
 
-  "get_user_balance_ICP": () -> (float64);
+  "get_user_balance_icp": () -> (float64);
+
+  "transfer_cycles": (principal, nat64) -> ();
 
   "http_request": (record {
     method: text;
