@@ -1,7 +1,5 @@
-// src/context/NftContext.tsx
 import { createContext, useContext, useState, useEffect } from 'react';
 import { Buffer } from 'buffer';
-import { Principal } from '@dfinity/principal';
 import { createAnonymousActor } from '../../hooks/wallet-login/anonymous-actor';
 import { CardProps, NFT } from '../../interfaces';
 
@@ -16,7 +14,7 @@ const NftContext = createContext<NftContextType>({
   cards: null,
   loading: false,
   error: null,
-  refetch: () => {},
+  refetch: () => {}
 });
 
 export const useNfts = () => useContext(NftContext);
@@ -35,7 +33,7 @@ export const NftProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const mapped = result.map((nft) => ({
         name: nft.metadata.name,
         imageLink: `data:${nft.metadata.content_type};base64,${Buffer.from(nft.metadata.image_data as Uint8Array).toString('base64')}`,
-        like_percentage: Math.floor(Math.random() * 100),
+        like_percentage: Math.floor(Math.random() * 100)
       }));
 
       setCards(mapped);

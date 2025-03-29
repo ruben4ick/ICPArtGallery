@@ -9,7 +9,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider>
       <NftProvider>
-      <App />
+        <App />
       </NftProvider>
     </AuthProvider>
   </React.StrictMode>

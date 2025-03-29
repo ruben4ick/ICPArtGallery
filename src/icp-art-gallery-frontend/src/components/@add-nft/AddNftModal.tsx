@@ -17,7 +17,6 @@ export const AddNftModal: FC<AddNftModalProps> = ({ onSubmit, onClose }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [file, setFile] = useState<File | null>(null);
-  const [price, setPrice] = useState('');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleDropZoneClick = () => {
@@ -45,7 +44,7 @@ export const AddNftModal: FC<AddNftModalProps> = ({ onSubmit, onClose }) => {
     try {
       const actor = createActor();
       const id = await actor.mint_nft(title, description, imageData, contentType);
-      console.log('NFT minted with ID:', id)
+      console.log('NFT minted with ID:', id);
       await refetch();
       onSubmit();
     } catch (err) {
@@ -92,13 +91,6 @@ export const AddNftModal: FC<AddNftModalProps> = ({ onSubmit, onClose }) => {
               type="file"
             />
           </div>
-          <input
-            className="modal-text-input p-3 rounded-lg appearance-none"
-            onChange={(e) => setPrice(e.target.value)}
-            placeholder=".price"
-            type="number"
-            value={price}
-          />
           <button className="card-btn modal-btn" onClick={handleSubmit} type="button">
             .submit
           </button>

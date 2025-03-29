@@ -1,5 +1,3 @@
-// src/types/plug.d.ts
-
 import type { HttpAgent } from '@dfinity/agent';
 
 export {};

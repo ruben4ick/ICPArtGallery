@@ -18,7 +18,7 @@ export const usePublicNFTs = () => {
       const mappedCards: CardProps[] = result.map((nft) => ({
         name: nft.metadata.name,
         imageLink: `data:${nft.metadata.content_type};base64,${Buffer.from(nft.metadata.image_data as Uint8Array).toString('base64')}`,
-        like_percentage: Math.floor(Math.random() * 100),
+        like_percentage: Math.floor(Math.random() * 100)
       }));
 
       setCards(mappedCards);
@@ -37,4 +37,3 @@ export const usePublicNFTs = () => {
 
   return { cards, loading, error, refetch: fetchNFTs };
 };
-
