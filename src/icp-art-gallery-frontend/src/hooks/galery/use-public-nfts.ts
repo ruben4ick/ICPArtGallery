@@ -4,7 +4,6 @@ import { Principal } from '@dfinity/principal';
 import { Buffer } from 'buffer';
 import { createAnonymousActor } from '../wallet-login/anonymous-actor';
 
-
 export interface NFT {
   id: bigint;
   owner: Principal;
@@ -36,12 +35,12 @@ export const usePublicNFTs = () => {
         const mappedCards: CardProps[] = result.map((nft) => ({
           name: nft.metadata.name,
           imageLink: `data:${nft.metadata.content_type};base64,${Buffer.from(nft.metadata.image_data as Uint8Array).toString('base64')}`,
-          like_percentage: Math.floor(Math.random() * 100),
+          like_percentage: Math.floor(Math.random() * 100)
         }));
 
         setCards(mappedCards);
       } catch (err) {
-        console.error('Error loading public NFTs:', err);
+        console.error('.error loading public NFTs:', err);
         setError('Failed to load NFTs');
       } finally {
         setLoading(false);

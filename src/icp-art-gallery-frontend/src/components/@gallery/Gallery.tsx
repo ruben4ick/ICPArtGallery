@@ -3,7 +3,6 @@ import Masonry from 'react-masonry-css';
 import './style.scss';
 import { usePublicNFTs } from '../../hooks/galery/use-public-nfts';
 
-
 const breakpointColumnsObj = {
   default: 5,
   1920: 4,
@@ -17,10 +16,10 @@ export const Gallery = () => {
 
   return (
     <div className="justify-center px-4 w-full ml-[2%] mr-[2%]">
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {loading ? <p>...loading</p> : null}
+      {error ? <p className="text-red-500">{error}</p> : null}
 
-      {!loading && cards && (
+      {!loading && cards ? (
         <Masonry
           breakpointCols={breakpointColumnsObj}
           className="masonry-grid"
@@ -30,7 +29,7 @@ export const Gallery = () => {
             <Card key={index}>{card}</Card>
           ))}
         </Masonry>
-      )}
+      ) : null}
     </div>
   );
 };
