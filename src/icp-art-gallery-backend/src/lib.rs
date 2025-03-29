@@ -19,6 +19,8 @@ thread_local! {
 struct State {
     nfts: Vec<NFT>,
     custodians: HashSet<Principal>,
+    liked_by: HashMap<u64, HashSet<Principal>>,
+    disliked_by: HashMap<u64, HashSet<Principal>>,
 }
 
 #[derive(CandidType, Deserialize)]
@@ -27,7 +29,7 @@ struct StableState {
     certified: Vec<(String, Hash)>,
 }
 
-#[derive(CandidType, Deserialize)]
+#[derive(CandidType, Deserialize, Clone)]
 struct NFT {
     id: u64,
     owner: Principal,
@@ -68,13 +70,6 @@ fn post_upgrade() {
     } else {
         ic_cdk::println!("Failed to restore stable state. State was reset.");
     }
-}
-
-#[derive(CandidType, Deserialize)]
-struct NFTView {
-    id: u64,
-    owner: Principal,
-    metadata: Metadata,
 }
 
 #[init]
@@ -121,15 +116,9 @@ fn get_nft(id: u64) -> Option<Metadata> {
 }
 
 #[query]
-fn get_all_nfts() -> Vec<NFTView> {
+fn get_all_nfts() -> Vec<NFT> {
     STATE.with(|s| {
-        s.borrow().nfts.iter()
-            .map(|n| NFTView {
-                id: n.id,
-                owner: n.owner,
-                metadata: n.metadata.clone(),
-            })
-            .collect()
+        s.borrow().nfts.clone()
     })
 }
 
@@ -193,8 +182,27 @@ fn update_nft_metadata(id: u64, name: Option<String>, description: Option<String
 
 #[update]
 fn like_nft(id: u64) {
+    let caller = api::caller();
     STATE.with(|s| {
-        if let Some(nft) = s.borrow_mut().nfts.get_mut(id as usize) {
+        let mut state = s.borrow_mut();
+
+        if let Some(set) = state.liked_by.get(&id) {
+            if set.contains(&caller) {
+                return;
+            }
+        }
+
+        if let Some(dislike_set) = state.disliked_by.get_mut(&id) {
+            dislike_set.remove(&caller);
+            if let Some(nft) = state.nfts.get_mut(id as usize) {
+                if nft.dislikes > 0 {
+                    nft.dislikes -= 1;
+                }
+            }
+        }
+
+        state.liked_by.entry(id).or_default().insert(caller);
+        if let Some(nft) = state.nfts.get_mut(id as usize) {
             nft.likes += 1;
         }
     });
@@ -202,8 +210,27 @@ fn like_nft(id: u64) {
 
 #[update]
 fn dislike_nft(id: u64) {
+    let caller = api::caller();
     STATE.with(|s| {
-        if let Some(nft) = s.borrow_mut().nfts.get_mut(id as usize) {
+        let mut state = s.borrow_mut();
+
+        if let Some(set) = state.disliked_by.get(&id) {
+            if set.contains(&caller) {
+                return;
+            }
+        }
+
+        if let Some(like_set) = state.liked_by.get_mut(&id) {
+            like_set.remove(&caller);
+            if let Some(nft) = state.nfts.get_mut(id as usize) {
+                if nft.likes > 0 {
+                    nft.likes -= 1;
+                }
+            }
+        }
+
+        state.disliked_by.entry(id).or_default().insert(caller);
+        if let Some(nft) = state.nfts.get_mut(id as usize) {
             nft.dislikes += 1;
         }
     });
