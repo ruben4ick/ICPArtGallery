@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Buffer } from 'buffer';
 import { createAnonymousActor } from '../../hooks/wallet-login/anonymous-actor';
 import { CardProps, NFT } from '../../interfaces';
