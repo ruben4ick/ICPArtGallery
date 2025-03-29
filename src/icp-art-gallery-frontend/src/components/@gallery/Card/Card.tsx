@@ -1,10 +1,10 @@
 import '../../../index.scss';
 import './style.scss';
-import CardProps from '../interfaces/card-props';
 import { ThumbsUp, ThumbsDown } from 'lucide-react';
 import React from 'react';
 import CardModal from '../CardModal/CardModal';
 import useModal from '../../../hooks/modal/use-modal';
+import { CardProps } from '../../../interfaces';
 
 // TODO: hook for like
 // TODO: hook for dislike

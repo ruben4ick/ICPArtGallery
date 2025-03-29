@@ -3,6 +3,7 @@ import './style.scss';
 import React, { FC, useRef, useState } from 'react';
 import { UploadCloud, X } from 'lucide-react';
 import { createActor } from '../../actor';
+import { useNfts } from '../../context/@nfts/NftProvider';
 
 interface AddNftModalProps {
   onSubmit: () => void;
@@ -10,6 +11,7 @@ interface AddNftModalProps {
 }
 
 export const AddNftModal: FC<AddNftModalProps> = ({ onSubmit, onClose }) => {
+  const { refetch } = useNfts();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [file, setFile] = useState<File | null>(null);
@@ -40,6 +42,7 @@ export const AddNftModal: FC<AddNftModalProps> = ({ onSubmit, onClose }) => {
       const actor = createActor();
       const id = await actor.mint_nft(title, description, imageData, contentType);
       console.log('NFT minted with ID:', id)
+      await refetch(); 
       onSubmit();
     } catch (err) {
       console.error('Minting failed:', err);

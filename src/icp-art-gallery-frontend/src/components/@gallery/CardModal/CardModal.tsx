@@ -1,6 +1,6 @@
 import '../../../index.scss';
+import { CardProps } from '../../../interfaces';
 import './style.scss';
-import CardProps from '../interfaces/card-props';
 import { ThumbsUp, ThumbsDown, X } from 'lucide-react';
 import React from 'react';
 

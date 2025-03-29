@@ -1,7 +1,7 @@
 import Card from './Card/Card';
 import Masonry from 'react-masonry-css';
 import './style.scss';
-import { usePublicNFTs } from '../../hooks/galery/use-public-nfts';
+import { useNfts } from '../../context/@nfts/NftProvider';
 
 
 const breakpointColumnsObj = {
@@ -13,19 +13,14 @@ const breakpointColumnsObj = {
 };
 
 export const Gallery = () => {
-  const { cards, loading, error } = usePublicNFTs();
+  const { cards, loading, error } = useNfts();
 
   return (
     <div className="justify-center px-4 w-full ml-[2%] mr-[2%]">
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
-
       {!loading && cards && (
-        <Masonry
-          breakpointCols={breakpointColumnsObj}
-          className="masonry-grid"
-          columnClassName="masonry-column"
-        >
+        <Masonry breakpointCols={breakpointColumnsObj} className="masonry-grid" columnClassName="masonry-column">
           {cards.map((card, index) => (
             <Card key={index}>{card}</Card>
           ))}
@@ -34,5 +29,4 @@ export const Gallery = () => {
     </div>
   );
 };
-
 export default Gallery;
