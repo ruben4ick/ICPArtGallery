@@ -4,13 +4,12 @@ import type { _SERVICE } from '../../declarations/icp-art-gallery-backend/icp-ar
 import { canisterId as backendId } from '../../declarations/icp-art-gallery-backend';
 
 export const createActor = (): import('@dfinity/agent').ActorSubclass<_SERVICE> => {
-    const agent = new HttpAgent();
+  const agent = new HttpAgent();
 
-    agent.fetchRootKey();
+  agent.fetchRootKey();
 
-
-    return Actor.createActor<_SERVICE>(idlFactory, {
-        agent,
-        canisterId: backendId,
-    });
+  return Actor.createActor<_SERVICE>(idlFactory, {
+    agent,
+    canisterId: backendId
+  });
 };
