@@ -19,9 +19,6 @@ thread_local! {
 struct State {
     nfts: Vec<NFT>,
     custodians: HashSet<Principal>,
-
-    // NFT ID -> Price in cycles (ICP)
-    listings: HashMap<u64, u64>, 
 }
 
 #[derive(CandidType, Deserialize)]
@@ -36,14 +33,15 @@ struct NFT {
     owner: Principal,
     metadata: Metadata,
     created_at: u64,
-    rating: u8,
+    likes: u64,
+    dislikes: u64,
 }
+
 #[derive(CandidType, Deserialize, Clone)]
 struct Metadata {
     name: String,
-    description: String,
+    description: Option<String>,
     image_data: Vec<u8>,
-    content_type: String,
 }
 
 #[pre_upgrade]
@@ -89,21 +87,27 @@ fn init() {
 
 // MARK: basic work with NFT
 #[update]
-fn mint_nft(name: String, description: String, image_data: Vec<u8>, content_type: String) -> u64 {
+fn mint_nft(name: String, description: String, image_data: Vec<u8>, price: u64) -> u64 {
     let caller = api::caller();
     STATE.with(|s| {
         let mut state = s.borrow_mut();
         let id = state.nfts.len() as u64;
-        let metadata = Metadata { name, description, image_data: image_data.clone(), content_type };
+        let metadata = Metadata {
+            name,
+            description,
+            image_data: image_data.clone()
+        };
         let created_at = time();
         let nft = NFT {
             id,
             owner: caller,
             metadata,
             created_at,
-            rating: 0, // початковий рейтинг
+            likes: 0,
+            dislikes: 0,
         };
         state.nfts.push(nft);
+        state.listings.insert(id, price);
         add_certified_nft(id, &image_data);
         id
     })
@@ -166,7 +170,7 @@ fn burn_nft(id: u64) {
 }
 
 #[update]
-fn update_nft_metadata(id: u64, name: Option<String>, description: Option<String>, image_data: Option<Vec<u8>>, content_type: Option<String>) {
+fn update_nft_metadata(id: u64, name: Option<String>, description: Option<String>, image_data: Option<Vec<u8>>) {
     let caller = api::caller();
     STATE.with(|s| {
         let mut state = s.borrow_mut();
@@ -182,133 +186,25 @@ fn update_nft_metadata(id: u64, name: Option<String>, description: Option<String
                     nft.metadata.image_data = image_data.clone();
                     add_certified_nft(id, &image_data);
                 }
-                if let Some(content_type) = content_type {
-                    nft.metadata.content_type = content_type;
-                }
             }
         }
     });
 }
 
 #[update]
-fn mint_many_nfts(names: Vec<String>, descriptions: Vec<String>, images: Vec<Vec<u8>>, content_types: Vec<String>) -> Vec<u64> {
-    let mut nft_ids = Vec::new();
-
-    for ((name, description), (image_data, content_type)) in names.iter().zip(descriptions.iter()).zip(images.iter().zip(content_types.iter())) {
-        let id = mint_nft(name.clone(), description.clone(), image_data.clone(), content_type.clone());
-        nft_ids.push(id);
-    }
-
-    nft_ids
-}
-
-// MARK: Marketplave functionality
-#[update]
-fn list_nft(id: u64, price: u64) {
-    let caller = api::caller();
+fn like_nft(id: u64) {
     STATE.with(|s| {
-        let mut state = s.borrow_mut();
-        if let Some(nft) = state.nfts.get(id as usize) {
-            if nft.owner == caller {
-                state.listings.insert(id, price);
-            }
+        if let Some(nft) = s.borrow_mut().nfts.get_mut(id as usize) {
+            nft.likes += 1;
         }
     });
 }
 
 #[update]
-fn buy_nft(id: u64) {
-    let buyer = api::caller();
+fn dislike_nft(id: u64) {
     STATE.with(|s| {
-        let mut state = s.borrow_mut();
-        if let Some(&price) = state.listings.get(&id) {
-            if let Some(nft) = state.nfts.get_mut(id as usize) {
-                if nft.owner != buyer {
-                    let cycles_balance = api::canister_balance();
-                    if cycles_balance > price {
-                        
-                        let result = transfer_cycles(buyer, price);
-                        
-                        if result {
-
-                            transfer_nft(id, buyer);
-
-                            state.listings.remove(&id);
-
-                        }
-
-                    }
-                }
-            }
+        if let Some(nft) = s.borrow_mut().nfts.get_mut(id as usize) {
+            nft.dislikes += 1;
         }
     });
-}
-
-#[update]
-fn cancel_listing(id: u64) {
-    let caller = api::caller();
-    STATE.with(|s| {
-        let mut state = s.borrow_mut();
-        if let Some(nft) = state.nfts.get(id as usize) {
-            if nft.owner == caller {
-                state.listings.remove(&id);
-            }
-        }
-    });
-}
-
-#[query]
-fn get_listings() -> Vec<(u64, u64)> {
-    STATE.with(|s| {
-        s.borrow().listings.iter().map(|(id, price)| (*id, *price)).collect()
-    })
-}
-
-// MARK: working with cycles
-#[update]
-fn get_user_balance_cycles() -> u64 {
-
-    let caller = api::caller(); 
-    
-    let cycles_balance = api::canister_balance();
-    
-    cycles_balance
-}
-
-
-fn cycles_to_icp(cycles: u64) -> f64 {
-    // 1 ICP = 1,000,000,000 cycles
-    let icp_per_cycle = 1_000_000_000u64; 
-
-    cycles as f64 / icp_per_cycle as f64
-}
-
-#[update]
-fn get_user_balance_icp() -> f64 {
-    let cycles_balance = get_user_balance_cycles();
-
-    // Check for potential errors
-    if cycles_balance == 0 {
-        return 0.0;
-    }
-
-    let icp_balance = cycles_to_icp(cycles_balance);
-
-    if icp_balance.is_nan() || icp_balance.is_infinite() {
-        return 0.0;
-    }
-
-    icp_balance
-}
-
-#[update]
-fn transfer_cycles(to: Principal, amount: u64) -> bool {
-
-    let caller = api::caller(); 
-
-    // TODO: implement the transfer (didnt see permit of direct transfer in icp standart)
-
-    let result = true;
-
-    result
 }
