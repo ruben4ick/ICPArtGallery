@@ -1,4 +1,4 @@
-import {Principal} from "@dfinity/principal";
+import { Principal } from '@dfinity/principal';
 
 export interface CardProps {
   id: bigint;

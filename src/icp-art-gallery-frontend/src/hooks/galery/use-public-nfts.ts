@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CardProps } from '../../interfaces';
-import {fetchAllNFTs} from "../../utils/fetch-all-nfts";
+import { fetchAllNFTs } from '../../utils/fetch-all-nfts';
 
 export const usePublicNFTs = () => {
   const [cards, setCards] = useState<CardProps[] | null>(null);

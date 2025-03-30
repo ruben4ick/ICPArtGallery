@@ -2,11 +2,11 @@ import '../../index.scss';
 import './style.scss';
 import React, { FC, useRef, useState } from 'react';
 import { UploadCloud, X } from 'lucide-react';
-import {createAnonymousActor} from "../../hooks/wallet-login/anonymous-actor";
+import { createAnonymousActor } from '../../hooks/wallet-login/anonymous-actor';
 import Portal from '../Portal';
 import useModal from '../../hooks/modal/use-modal';
 import { useNfts } from '../../context/@nfts/NftProvider';
-import {createPlugActor} from "../../hooks/wallet-login/plug-auth";
+import { createPlugActor } from '../../hooks/wallet-login/plug-auth';
 
 interface AddNftModalProps {
   onSubmit: () => void;
@@ -45,9 +45,7 @@ export const AddNftModal: FC<AddNftModalProps> = ({ onSubmit, onClose }) => {
     try {
       const isMainnet = import.meta.env.VITE_DFX_NETWORK === 'ic';
 
-      const actor = isMainnet
-          ? createPlugActor()
-          : createAnonymousActor();
+      const actor = isMainnet ? createPlugActor() : createAnonymousActor();
       const id = await actor.mint_nft(title, description, imageData, contentType);
       console.log('NFT minted with ID:', id);
       await refetch();

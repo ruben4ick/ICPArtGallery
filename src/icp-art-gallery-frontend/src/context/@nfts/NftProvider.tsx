@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { CardProps} from '../../interfaces';
-import {fetchAllNFTs} from "../../utils/fetch-all-nfts";
+import { CardProps } from '../../interfaces';
+import { fetchAllNFTs } from '../../utils/fetch-all-nfts';
 
 interface NftContextType {
   cards: CardProps[] | null;
