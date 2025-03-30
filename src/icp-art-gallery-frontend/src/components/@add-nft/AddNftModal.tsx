@@ -3,10 +3,10 @@ import './style.scss';
 import React, { FC, useRef, useState } from 'react';
 import { UploadCloud, X } from 'lucide-react';
 import { createAnonymousActor } from '../../hooks/wallet-login/anonymous-actor';
-import Portal from '../Portal';
 import useModal from '../../hooks/modal/use-modal';
 import { useNfts } from '../../context/@nfts/NftProvider';
 import { createPlugActor } from '../../hooks/wallet-login/plug-auth';
+import ErrorModal from "../ErrorModal";
 
 declare const __DFX_NETWORK__: string;
 
@@ -102,25 +102,12 @@ export const AddNftModal: FC<AddNftModalProps> = ({ onSubmit, onClose }) => {
           </button>
         </div>
       </div>
-      {isErrorOpen ? (
-        <Portal>
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center">
-            <div className="glass modal-glass w-[480px] rounded-lg p-6 relative">
-              <button
-                aria-label="Close modal"
-                className="card-btn modal-btn modal-close-btn absolute top-2 right-2 text-white p-2 hover:bg-white/10 transition z-10"
-                onClick={closeError}
-                type="button"
-              >
-                <X size={24} />
-              </button>
-              <div className="modal-text flex flex-col items-center justify-center mt-4">
-                <p>.please_fill_all_required_fields</p>
-              </div>
-            </div>
-          </div>
-        </Portal>
-      ) : null}
+
+      {isErrorOpen ? <ErrorModal
+          message=".please_connect_your_wallet"
+          onClose={closeError}
+      /> : null}
+
     </>
   );
 };
