@@ -4,6 +4,7 @@ import './style.scss';
 import { ThumbsUp, ThumbsDown, X } from 'lucide-react';
 import React from 'react';
 import {Principal} from "@dfinity/principal";
+import {useNftInteractions} from "../../../hooks/galery/use-nft-interactions";
 
 interface CardModalProps {
     children: CardProps;
@@ -16,6 +17,8 @@ const formatDate = (timestamp: bigint) => {
 };
 
 export const CardModal: React.FC<CardModalProps> = ({ children, onClose }) => {
+    const { likeNft, dislikeNft } = useNftInteractions();
+
     return (
         <div className="glass modal-glass w-[960px] rounded-lg overflow-hidden p-6 relative grid grid-cols-[60%_auto] grid-rows-[auto_auto_auto] gap-4">
             <button
@@ -53,10 +56,10 @@ export const CardModal: React.FC<CardModalProps> = ({ children, onClose }) => {
             </div>
 
             <div className="col-start-2 row-start-3 flex items-center justify-end gap-4 self-center mt-[10px]">
-                <button className="card-btn modal-btn" type="button">
+                <button className="card-btn modal-btn" type="button" onClick={() => likeNft(children.id)}>
                     <ThumbsUp size={20} />
                 </button>
-                <button className="card-btn modal-btn" type="button">
+                <button className="card-btn modal-btn" type="button" onClick={() => dislikeNft(children.id)}>
                     <ThumbsDown size={20} />
                 </button>
             </div>

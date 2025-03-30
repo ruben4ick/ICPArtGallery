@@ -3,8 +3,9 @@ import { canisterId } from '../../../../declarations/icp-art-gallery-backend';
 import type { _SERVICE } from '../../../../declarations/icp-art-gallery-backend/icp-art-gallery-backend.did.d.ts';
 import { idlFactory } from '../../../../declarations/icp-art-gallery-backend';
 
-export const createAnonymousActor = () => {
+export const createAnonymousActor = (): import('@dfinity/agent').ActorSubclass<_SERVICE> => {
   const agent = new HttpAgent();
+
   if (import.meta.env.VITE_DFX_NETWORK !== 'ic') {
     agent.fetchRootKey();
   }
