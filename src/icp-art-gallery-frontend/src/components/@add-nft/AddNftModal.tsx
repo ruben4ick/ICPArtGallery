@@ -43,9 +43,10 @@ export const AddNftModal: FC<AddNftModalProps> = ({ onSubmit, onClose }) => {
     const contentType = file.type;
 
     try {
-      const isMainnet = import.meta.env.VITE_DFX_NETWORK === 'ic';
+      const isLocalnet = import.meta.env.VITE_DFX_NETWORK === 'local';
 
-      const actor = isMainnet ? createPlugActor() : createAnonymousActor();
+      //actor = createaninymousactor //for local development
+      const actor = isLocalnet ? createAnonymousActor() : createPlugActor();
       const id = await actor.mint_nft(title, description, imageData, contentType);
       console.log('NFT minted with ID:', id);
       await refetch();
