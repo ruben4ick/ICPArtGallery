@@ -8,6 +8,8 @@ import useModal from '../../hooks/modal/use-modal';
 import { useNfts } from '../../context/@nfts/NftProvider';
 import { createPlugActor } from '../../hooks/wallet-login/plug-auth';
 
+declare const __DFX_NETWORK__: string;
+
 interface AddNftModalProps {
   onSubmit: () => void;
   onClose: () => void;
@@ -43,9 +45,9 @@ export const AddNftModal: FC<AddNftModalProps> = ({ onSubmit, onClose }) => {
     const contentType = file.type;
 
     try {
-      const isLocalnet = import.meta.env.VITE_DFX_NETWORK === 'local';
+      const isLocalnet = __DFX_NETWORK__ === 'local';
 
-      //actor = createaninymousactor //for local development
+      //actor = createAnonymousActor //for local development
       const actor = isLocalnet ? createAnonymousActor() : createPlugActor();
       const id = await actor.mint_nft(title, description, imageData, contentType);
       console.log('NFT minted with ID:', id);

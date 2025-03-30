@@ -2,7 +2,8 @@ import { Actor } from '@dfinity/agent';
 import { idlFactory as backendIDL } from '../../../../declarations/icp-art-gallery-backend';
 import type { _SERVICE } from '../../../../declarations/icp-art-gallery-backend/icp-art-gallery-backend.did.d.ts';
 
-const canisterId = import.meta.env.VITE_CANISTER_ID_ICP_ART_GALLERY_BACKEND;
+declare const __BACKEND_CANISTER_ID__: string;
+const canisterId = __BACKEND_CANISTER_ID__;
 
 export const loginWithPlug = async (): Promise<string | null> => {
   if (!window.ic || !window.ic.plug) {

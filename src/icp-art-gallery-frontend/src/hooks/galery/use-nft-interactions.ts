@@ -2,14 +2,16 @@ import { useNfts } from '../../context/@nfts/NftProvider';
 import { createAnonymousActor } from '../wallet-login/anonymous-actor';
 import { createPlugActor } from '../wallet-login/plug-auth';
 
+declare const __DFX_NETWORK__: string;
+
 export const useNftInteractions = () => {
   const { refetch } = useNfts();
 
   const likeNft = async (id: bigint) => {
     try {
-      const isMainnet = import.meta.env.VITE_DFX_NETWORK === 'local';
+      const isLocalnet = __DFX_NETWORK__ === 'local';
 
-      const actor = isMainnet ? createAnonymousActor() : createPlugActor();
+      const actor = isLocalnet ? createAnonymousActor() : createPlugActor();
       await actor.like_nft(id);
       console.log(`Liked NFT ${id}`);
       refetch();
@@ -20,9 +22,9 @@ export const useNftInteractions = () => {
 
   const dislikeNft = async (id: bigint) => {
     try {
-      const isLocalnet = import.meta.env.VITE_DFX_NETWORK === 'local';
+      const isLocalnet = __DFX_NETWORK__ === 'local';
 
-      //actor = createaninymousactor //for local development
+      //actor = createAnonymousActor //for local development
       const actor = isLocalnet ? createAnonymousActor() : createPlugActor();
       await actor.dislike_nft(id);
       console.log(`Disliked NFT ${id}`);

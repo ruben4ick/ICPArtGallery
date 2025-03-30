@@ -47,4 +47,8 @@ export default defineConfig({
     ],
     dedupe: ['@dfinity/agent'],
   },
+  define: {
+    __BACKEND_CANISTER_ID__: JSON.stringify(process.env.CANISTER_ID_ICP_ART_GALLERY_BACKEND),
+    __DFX_NETWORK__: JSON.stringify(process.env.DFX_NETWORK),
+  },
 });
