@@ -6,7 +6,7 @@ import { createAnonymousActor } from '../../hooks/wallet-login/anonymous-actor';
 import useModal from '../../hooks/modal/use-modal';
 import { useNfts } from '../../context/@nfts/NftProvider';
 import { createPlugActor } from '../../hooks/wallet-login/plug-auth';
-import ErrorModal from "../ErrorModal";
+import ErrorModal from '../ErrorModal';
 
 declare const __DFX_NETWORK__: string;
 
@@ -103,11 +103,9 @@ export const AddNftModal: FC<AddNftModalProps> = ({ onSubmit, onClose }) => {
         </div>
       </div>
 
-      {isErrorOpen ? <ErrorModal
-          message=".please_connect_your_wallet"
-          onClose={closeError}
-      /> : null}
-
+      {isErrorOpen ? (
+        <ErrorModal message=".please_connect_your_wallet" onClose={closeError} />
+      ) : null}
     </>
   );
 };
