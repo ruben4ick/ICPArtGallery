@@ -1,6 +1,7 @@
 import {Principal} from "@dfinity/principal";
 
 export interface CardProps {
+  id: bigint;
   name?: string;
   imageLink: string;
   likes: bigint;

@@ -5,9 +5,11 @@ import React from 'react';
 import CardModal from '../CardModal/CardModal';
 import useModal from '../../../hooks/modal/use-modal';
 import { CardProps } from '../../../interfaces';
+import {useNftInteractions} from "../../../hooks/galery/use-nft-interactions";
 
 export const Card: React.FC<{ children: CardProps }> = ({ children }) => {
   const { isOpen: isCardOpen, open: openCard, close: closeCard } = useModal();
+  const { likeNft, dislikeNft } = useNftInteractions();
 
   return (
       <>
@@ -24,13 +26,13 @@ export const Card: React.FC<{ children: CardProps }> = ({ children }) => {
           <div className="flex items-center justify-between gap-4 mt-[8px] px-[4%]">
             <div className="flex items-center gap-1">
               <span className="like-percent text-white mx-2">{children.likes.toString()}</span>
-              <button className="card-btn" type="button">
+              <button className="card-btn" onClick={() => likeNft(children.id)} type="button">
                 <ThumbsUp size={20} />
               </button>
             </div>
 
             <div className="flex items-center gap-1">
-              <button className="card-btn" type="button">
+              <button className="card-btn" onClick={() => dislikeNft(children.id)} type="button">
                 <ThumbsDown size={20} />
               </button>
               <span className="like-percent text-white mx-2">{children.dislikes.toString()}</span>
