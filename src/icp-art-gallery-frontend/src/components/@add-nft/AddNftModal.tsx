@@ -60,7 +60,7 @@ export const AddNftModal: FC<AddNftModalProps> = ({ onSubmit, onClose }) => {
 
   return (
     <>
-      <div className="glass modal-glass w-[960px] rounded-lg flex flex-col">
+      <div className="glass modal-glass w-[960px] rounded-lg flex flex-col relative">
         <button
           aria-label="Close modal"
           className="card-btn modal-btn modal-close-btn absolute top-2 right-2 text-white p-2 hover:bg-white/10 transition z-10"
