@@ -13,14 +13,14 @@ const options: { label: string; value: SortOption }[] = [
   { label: 'Likes ↓', value: 'likes_desc' }
 ];
 
-export const Filter = () => {
+export const Sorter = () => {
   const { sort, setSort } = useGalleryContext();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
       <div className="relative">
         <button className="head-text cursor-pointer" onClick={() => setIsOpen(!isOpen)} type="button">
-          .filter: {sort}
+          .sort: {sort}
         </button>
         {isOpen ? <div className="glass modal-glass absolute mt-2 w-48 rounded z-99">
               {options.map(({ label, value }) => (
@@ -42,4 +42,4 @@ export const Filter = () => {
 };
 
 
-export default Filter;
+export default Sorter;
