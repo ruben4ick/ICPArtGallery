@@ -10,5 +10,6 @@ export interface NFT {
     name: string;
     description: string;
     image_data: Uint8Array | number[];
+    content_type: string;
   };
 }

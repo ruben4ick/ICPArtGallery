@@ -33,17 +33,18 @@ struct StableState {
 struct NFT {
     id: u64,
     owner: Principal,
-    metadata: Metadata,
     created_at: u64,
     likes: u64,
     dislikes: u64,
+    metadata: Metadata,
 }
 
 #[derive(CandidType, Deserialize, Clone)]
 struct Metadata {
     name: String,
-    description: Option<String>,
+    description: String,
     image_data: Vec<u8>,
+    content_type: String,
 }
 
 #[pre_upgrade]
@@ -80,9 +81,8 @@ fn init() {
     });
 }
 
-// MARK: basic work with NFT
 #[update]
-fn mint_nft(name: String, description: String, image_data: Vec<u8>, price: u64) -> u64 {
+fn mint_nft(name: String, description: String, image_data: Vec<u8>, content_type: String) -> u64 {
     let caller = api::caller();
     STATE.with(|s| {
         let mut state = s.borrow_mut();
@@ -90,7 +90,8 @@ fn mint_nft(name: String, description: String, image_data: Vec<u8>, price: u64) 
         let metadata = Metadata {
             name,
             description,
-            image_data: image_data.clone()
+            image_data: image_data.clone(),
+            content_type,
         };
         let created_at = time();
         let nft = NFT {
@@ -102,7 +103,6 @@ fn mint_nft(name: String, description: String, image_data: Vec<u8>, price: u64) 
             dislikes: 0,
         };
         state.nfts.push(nft);
-        state.listings.insert(id, price);
         add_certified_nft(id, &image_data);
         id
     })
@@ -159,7 +159,13 @@ fn burn_nft(id: u64) {
 }
 
 #[update]
-fn update_nft_metadata(id: u64, name: Option<String>, description: Option<String>, image_data: Option<Vec<u8>>) {
+fn update_nft_metadata(
+    id: u64,
+    name: Option<String>,
+    description: Option<String>,
+    image_data: Option<Vec<u8>>,
+    content_type: Option<String>,
+) {
     let caller = api::caller();
     STATE.with(|s| {
         let mut state = s.borrow_mut();
@@ -175,10 +181,14 @@ fn update_nft_metadata(id: u64, name: Option<String>, description: Option<String
                     nft.metadata.image_data = image_data.clone();
                     add_certified_nft(id, &image_data);
                 }
+                if let Some(content_type) = content_type {
+                    nft.metadata.content_type = content_type;
+                }
             }
         }
     });
 }
+
 
 #[update]
 fn like_nft(id: u64) {
