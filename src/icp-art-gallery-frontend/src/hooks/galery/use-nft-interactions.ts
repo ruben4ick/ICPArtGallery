@@ -8,11 +8,9 @@ export const useNftInteractions = () => {
 
     const likeNft = async (id: bigint) => {
         try {
-            const isMainnet = import.meta.env.VITE_DFX_NETWORK === 'ic';
+            const actor = createPlugActor()
+            // const actor = createAnonymousActor() // for local development
 
-            const actor = isMainnet
-                ? createPlugActor()
-                : createAnonymousActor();
             await actor.like_nft(id);
             console.log(`Liked NFT ${id}`);
             refetch();
@@ -23,11 +21,9 @@ export const useNftInteractions = () => {
 
     const dislikeNft = async (id: bigint) => {
         try {
-            const isMainnet = import.meta.env.VITE_DFX_NETWORK === 'ic';
+            const actor = createPlugActor()
+            // const actor = createAnonymousActor() // for local development
 
-            const actor = isMainnet
-                ? createPlugActor()
-                : createAnonymousActor();
             await actor.dislike_nft(id);
             console.log(`Disliked NFT ${id}`);
             refetch();
