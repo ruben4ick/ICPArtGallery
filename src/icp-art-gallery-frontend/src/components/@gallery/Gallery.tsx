@@ -1,20 +1,9 @@
-import Masonry from 'react-masonry-css';
-import '../../index.scss';
-import './style.scss';
-import CardProps from './interfaces/card-props';
 import Card from './Card/Card';
-
-//TODO: fetch data properly
-const images = [
-  'https://i.pinimg.com/736x/13/88/f4/1388f4fdd2b96a8aa6a7891fae2d92f6.jpg',
-  'https://i.etsystatic.com/22054722/r/il/e74cc4/5977089272/il_570xN.5977089272_tmdl.jpg',
-  'https://i.pinimg.com/736x/01/76/b7/0176b79f2a499b6cee63de3a590c8609.jpg'
-];
-const mockCards: CardProps[] = Array.from({ length: 12 }).map((_, i) => ({
-  name: `.card ${i + 1}`,
-  like_percentage: Math.floor(Math.random() * 100),
-  imageLink: images[i % images.length]
-}));
+import Masonry from 'react-masonry-css';
+import './style.scss';
+import { useNfts } from '../../context/@nfts/NftProvider';
+import {useSortNFTs} from "../../hooks/galery/use-sort-nfts";
+import {useGalleryContext} from "../../context/@nfts/GaleryContext";
 
 const breakpointColumnsObj = {
   default: 5,
@@ -25,19 +14,27 @@ const breakpointColumnsObj = {
 };
 
 export const Gallery = () => {
+  const { cards, loading, error } = useNfts();
+  const { sort } = useGalleryContext();
+  const sortedCards = useSortNFTs(cards, sort);
+
   return (
-    <div className="justify-center px-4 w-full ml-[2%] mr-[2%]">
-      <Masonry
-        breakpointCols={breakpointColumnsObj}
-        className="masonry-grid"
-        columnClassName="masonry-column"
-      >
-        {mockCards.map((card, index) => (
-          <Card key={index}>{card}</Card>
-        ))}
-      </Masonry>
-    </div>
+      <div className="justify-center px-4 w-full ml-[2%] mr-[2%]">
+        {loading ? <p>...loading</p> : null}
+        {error ? <p className="text-red-500">{error}</p> : null}
+
+        {!loading && !error && Array.isArray(sortedCards) && sortedCards.length > 0 ? (
+            <Masonry
+                breakpointCols={breakpointColumnsObj}
+                className="masonry-grid"
+                columnClassName="masonry-column"
+            >
+              {sortedCards.map((card, index) => (
+                  <Card key={index}>{card}</Card>
+              ))}
+            </Masonry>
+        ) : null}
+      </div>
   );
 };
-
 export default Gallery;
