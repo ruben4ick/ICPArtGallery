@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Buffer } from 'buffer';
-import { createAnonymousActor } from '../../hooks/wallet-login/anonymous-actor';
-import { CardProps, NFT } from '../../interfaces';
+import { CardProps} from '../../interfaces';
+import {fetchAllNFTs} from "../../utils/fetch-all-nfts";
 
 interface NftContextType {
   cards: CardProps[] | null;
@@ -27,15 +26,7 @@ export const NftProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const fetchNFTs = async () => {
     try {
       setLoading(true);
-      const actor = createAnonymousActor();
-      const result: NFT[] = await actor.get_all_nfts();
-
-      const mapped = result.map((nft) => ({
-        name: nft.metadata.name,
-        imageLink: `data:${nft.metadata.content_type};base64,${Buffer.from(nft.metadata.image_data as Uint8Array).toString('base64')}`,
-        like_percentage: Math.floor(Math.random() * 100)
-      }));
-
+      const mapped = await fetchAllNFTs();
       setCards(mapped);
       setError(null);
     } catch (e) {
