@@ -28,9 +28,6 @@ If you want to test your project locally, you can use the following commands:
 # Installs the dependencies
 yarn install
 
-#Generates code from your canister's interface
-yarn dfx:generate
-
 # Builds the frontend
 yarn build
 
@@ -39,6 +36,9 @@ yarn dfx:start
 
 # Deploys your canisters to the replica and generates your candid interface
 yarn dfx:deploy
+
+#Generates code from your canister's interface
+yarn dfx:generate
 
 # Starts the frontend
 yarn start
